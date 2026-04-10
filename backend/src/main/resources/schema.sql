@@ -60,6 +60,7 @@ CREATE TABLE IF NOT EXISTS t_project (
     region VARCHAR(50),
     start_date DATE,
     end_date DATE,
+    special_requirements VARCHAR(500),
     remark VARCHAR(500),
     create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     update_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

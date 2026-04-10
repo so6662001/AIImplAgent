@@ -2,6 +2,7 @@ package com.aimpl.domain.workforce.service;
 
 import com.aimpl.common.enums.EvalRating;
 import com.aimpl.common.exception.BizException;
+import com.aimpl.domain.project.entity.Project;
 import com.aimpl.domain.project.mapper.ProjectMapper;
 import com.aimpl.domain.workforce.dto.ProjectEvaluationCreateDTO;
 import com.aimpl.domain.workforce.entity.ProjectEvaluation;
@@ -21,10 +22,12 @@ import java.util.List;
 public class ProjectEvaluationService extends ServiceImpl<ProjectEvaluationMapper, ProjectEvaluation> {
 
     private final ProjectMapper projectMapper;
+    private final EngineerService engineerService;
 
     @Transactional
     public ProjectEvaluation create(ProjectEvaluationCreateDTO dto) {
-        if (projectMapper.selectById(dto.getProjectId()) == null) {
+        Project project = projectMapper.selectById(dto.getProjectId());
+        if (project == null) {
             throw new BizException("项目不存在: " + dto.getProjectId());
         }
 
@@ -49,6 +52,11 @@ public class ProjectEvaluationService extends ServiceImpl<ProjectEvaluationMappe
         entity.setRating(rating);
         entity.setAiComment(dto.getAiComment());
         save(entity);
+
+        if (project.getPmId() != null) {
+            engineerService.updateCompositeScoreFromEvaluations(project.getPmId());
+        }
+
         return entity;
     }
 

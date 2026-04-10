@@ -29,6 +29,7 @@ public class ProjectService extends ServiceImpl<ProjectMapper, Project> {
         project.setModules(dto.getModules() != null ? String.join(",", dto.getModules()) : null);
         project.setRegion(dto.getRegion());
         project.setStartDate(dto.getStartDate());
+        project.setSpecialRequirements(dto.getSpecialRequirements());
         project.setRemark(dto.getRemark());
         project.setStatus(com.aimpl.common.enums.ProjectStatus.PENDING);
         save(project);

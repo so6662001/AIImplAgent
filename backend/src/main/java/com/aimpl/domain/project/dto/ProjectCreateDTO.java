@@ -32,6 +32,9 @@ public class ProjectCreateDTO {
 
     private List<String> modules;
 
+    @Size(max = 500, message = "特殊需求长度不能超过500")
+    private String specialRequirements;
+
     @Size(max = 50, message = "区域长度不能超过50")
     private String region;
 

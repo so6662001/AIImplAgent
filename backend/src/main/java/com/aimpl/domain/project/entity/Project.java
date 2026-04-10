@@ -35,6 +35,8 @@ public class Project {
 
     private LocalDate endDate;
 
+    private String specialRequirements;
+
     private String remark;
 
     @TableField(fill = FieldFill.INSERT)
