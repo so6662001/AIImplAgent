@@ -1,3 +1,52 @@
+-- System User (用户管理)
+CREATE TABLE IF NOT EXISTS t_sys_user (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(20) NOT NULL UNIQUE,
+    password VARCHAR(100) NOT NULL,
+    real_name VARCHAR(30),
+    role VARCHAR(20),
+    phone VARCHAR(20),
+    email VARCHAR(60),
+    enabled BOOLEAN DEFAULT TRUE,
+    last_login_time TIMESTAMP,
+    create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    update_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    deleted INT DEFAULT 0
+);
+
+-- LLM Provider Config (大模型供应商配置)
+CREATE TABLE IF NOT EXISTS t_llm_provider_config (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    provider_name VARCHAR(30) NOT NULL UNIQUE,
+    provider_type VARCHAR(20) NOT NULL,
+    api_endpoint VARCHAR(500) NOT NULL,
+    api_key VARCHAR(500) NOT NULL,
+    model_name VARCHAR(50) NOT NULL,
+    max_tokens INT,
+    temperature DECIMAL(3,2),
+    enabled BOOLEAN DEFAULT TRUE,
+    create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    update_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    deleted INT DEFAULT 0
+);
+
+-- Agent Config (智能体配置)
+CREATE TABLE IF NOT EXISTS t_agent_config (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    agent_code VARCHAR(30) NOT NULL UNIQUE,
+    agent_name VARCHAR(60) NOT NULL,
+    description VARCHAR(500),
+    llm_provider_id BIGINT,
+    fallback_llm_provider_id BIGINT,
+    prompt_template TEXT,
+    rag_enabled BOOLEAN DEFAULT FALSE,
+    rag_collection_name VARCHAR(100),
+    enabled BOOLEAN DEFAULT TRUE,
+    create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    update_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    deleted INT DEFAULT 0
+);
+
 -- Project
 CREATE TABLE IF NOT EXISTS t_project (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,

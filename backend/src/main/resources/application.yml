@@ -18,6 +18,10 @@ spring:
     time-zone: Asia/Shanghai
     default-property-inclusion: non_null
 
+jwt:
+  secret: ai-impl-agent-jwt-secret-key-2026-steel-industry
+  expiration: 86400000
+
 mybatis-plus:
   configuration:
     map-underscore-to-camel-case: true
