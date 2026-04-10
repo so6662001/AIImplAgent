@@ -292,3 +292,73 @@ CREATE TABLE IF NOT EXISTS t_simulation_scene (
     create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     deleted INT DEFAULT 0
 );
+
+-- Supplier (供应商)
+CREATE TABLE IF NOT EXISTS t_supplier (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    supplier_code VARCHAR(32) NOT NULL UNIQUE,
+    full_name VARCHAR(120) NOT NULL,
+    short_name VARCHAR(40),
+    supplier_type VARCHAR(20),
+    credit_code VARCHAR(18),
+    contact VARCHAR(30),
+    phone VARCHAR(20),
+    address VARCHAR(200),
+    settlement_method VARCHAR(20),
+    tax_rate DECIMAL(5,4),
+    enabled BOOLEAN DEFAULT TRUE,
+    create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    deleted INT DEFAULT 0
+);
+
+-- Related Unit (相关单位)
+CREATE TABLE IF NOT EXISTS t_related_unit (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    unit_code VARCHAR(32) NOT NULL UNIQUE,
+    full_name VARCHAR(120) NOT NULL,
+    unit_type VARCHAR(20),
+    credit_code VARCHAR(18),
+    contact_person VARCHAR(30),
+    phone VARCHAR(20),
+    address VARCHAR(200),
+    bank_name VARCHAR(60),
+    bank_account VARCHAR(40),
+    enabled BOOLEAN DEFAULT TRUE,
+    create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    deleted INT DEFAULT 0
+);
+
+-- Training Daily Log (培训日志)
+CREATE TABLE IF NOT EXISTS t_training_daily_log (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    project_id BIGINT NOT NULL,
+    log_date DATE NOT NULL,
+    topic VARCHAR(100) NOT NULL,
+    trainer_name VARCHAR(30),
+    attendee_count INT DEFAULT 0,
+    sign_in_completed BOOLEAN DEFAULT FALSE,
+    courseware_uploaded BOOLEAN DEFAULT FALSE,
+    summary_uploaded BOOLEAN DEFAULT FALSE,
+    exam_conducted BOOLEAN DEFAULT FALSE,
+    daily_report_submitted BOOLEAN DEFAULT FALSE,
+    issues VARCHAR(2000),
+    create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    deleted INT DEFAULT 0
+);
+
+-- Engineer Worklog (工程师工作日志)
+CREATE TABLE IF NOT EXISTS t_engineer_worklog (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    engineer_id BIGINT NOT NULL,
+    project_id BIGINT NOT NULL,
+    work_date DATE NOT NULL,
+    tasks_plan VARCHAR(2000),
+    tasks_completed VARCHAR(2000),
+    documents_submitted VARCHAR(2000),
+    issues VARCHAR(2000),
+    next_day_plan VARCHAR(2000),
+    status VARCHAR(20) DEFAULT 'DRAFT',
+    create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    update_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    deleted INT DEFAULT 0
+);
