@@ -12,3 +12,10 @@ export function listWorklogs(params?: { engineerId?: number; projectId?: number 
 export function submitWorklog(id: number) {
   return request.put<R<EngineerWorklog>>(`/worklogs/${id}/submit`)
 }
+
+export function getDailyTasks(params: { engineerId: number; projectId: number; date: string }) {
+  return request.get<R<any>>('/workforce/daily-tasks', { params })
+}
+export function getReportDraft(params: { engineerId: number; projectId: number; date: string }) {
+  return request.get<R<any>>('/workforce/report-draft', { params })
+}
