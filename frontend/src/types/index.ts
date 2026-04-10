@@ -504,3 +504,34 @@ export interface AgentConfig {
   ragCollectionName: string
   enabled: boolean
 }
+
+export interface ClientLoginVO {
+  accessToken: string
+  projectId: number
+  projectName: string
+  employeeName: string
+  role: string
+}
+
+export interface QaSession {
+  id: number
+  projectId: number
+  clientUserId: number
+  title: string
+  status: string
+  messageCount: number
+  createTime: string
+  employeeName?: string
+  projectName?: string
+}
+
+export interface QaMessage {
+  id: number
+  sessionId: number
+  role: string
+  content: string
+  relatedModule: string
+  relatedVideoUrl: string
+  helpful: boolean | null
+  createTime: string
+}

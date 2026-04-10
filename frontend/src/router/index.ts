@@ -1,9 +1,22 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
+import { useClientAuthStore } from '@/stores/clientAuth'
 
 const router = createRouter({
   history: createWebHistory(),
   routes: [
+    {
+      path: '/client/login',
+      name: 'ClientLogin',
+      component: () => import('@/views/client/ClientLogin.vue'),
+      meta: { title: '培训助手登录', public: true, clientRoute: true },
+    },
+    {
+      path: '/client/chat',
+      name: 'ClientChat',
+      component: () => import('@/views/client/ClientChat.vue'),
+      meta: { title: 'ERP培训助手', clientRoute: true, requiresClientAuth: true },
+    },
     {
       path: '/login',
       name: 'Login',
@@ -237,12 +250,28 @@ const router = createRouter({
           component: () => import('@/views/agent/AgentConfigList.vue'),
           meta: { title: '智能体配置' },
         },
+        {
+          path: 'qa-sessions',
+          name: 'QaSessions',
+          component: () => import('@/views/training/QaSessionList.vue'),
+          meta: { title: '问答管理' },
+        },
       ],
     },
   ],
 })
 
 router.beforeEach((to) => {
+  if (to.meta.clientRoute) {
+    if (to.meta.requiresClientAuth) {
+      const clientAuth = useClientAuthStore()
+      if (!clientAuth.isLoggedIn) {
+        return '/client/login'
+      }
+    }
+    return
+  }
+
   const authStore = useAuthStore()
   if (!authStore.isLoggedIn && !to.meta.public) {
     return '/login'

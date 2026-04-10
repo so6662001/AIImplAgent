@@ -72,6 +72,10 @@
           <el-menu-item index="/training-logs">培训日志</el-menu-item>
           <el-menu-item index="/training-dashboard">培训仪表盘</el-menu-item>
           <el-menu-item index="/required-courses">KA必学课程</el-menu-item>
+          <el-menu-item index="/qa-sessions">
+            <el-icon><ChatDotSquare /></el-icon>
+            <span>问答管理</span>
+          </el-menu-item>
         </el-sub-menu>
 
         <el-sub-menu index="delivery">
@@ -139,7 +143,7 @@
 import { useRoute, useRouter } from 'vue-router'
 import {
   Folder, Box, User, Trophy, Document, Setting, Monitor, UserFilled,
-  Avatar, Money, Coin, Cpu, MagicStick, SwitchButton,
+  Avatar, Money, Coin, Cpu, MagicStick, SwitchButton, ChatDotSquare,
 } from '@element-plus/icons-vue'
 import { useAuthStore } from '@/stores/auth'
 
