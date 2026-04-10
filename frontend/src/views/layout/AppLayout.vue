@@ -22,9 +22,37 @@
           <el-icon><User /></el-icon>
           <span>客户档案</span>
         </el-menu-item>
+        <el-menu-item index="/suppliers">
+          <el-icon><Goods /></el-icon>
+          <span>供应商档案</span>
+        </el-menu-item>
+        <el-menu-item index="/warehouses">
+          <el-icon><House /></el-icon>
+          <span>仓库档案</span>
+        </el-menu-item>
+        <el-menu-item index="/categories">
+          <el-icon><OfficeBuilding /></el-icon>
+          <span>品类档案</span>
+        </el-menu-item>
+        <el-menu-item index="/related-units">
+          <el-icon><Connection /></el-icon>
+          <span>往来单位</span>
+        </el-menu-item>
         <el-menu-item index="/training">
           <el-icon><Trophy /></el-icon>
           <span>培训考核</span>
+        </el-menu-item>
+        <el-menu-item index="/trainees">
+          <el-icon><Avatar /></el-icon>
+          <span>学员管理</span>
+        </el-menu-item>
+        <el-menu-item index="/training-logs">
+          <el-icon><Calendar /></el-icon>
+          <span>培训日志</span>
+        </el-menu-item>
+        <el-menu-item index="/training-dashboard">
+          <el-icon><Odometer /></el-icon>
+          <span>培训仪表盘</span>
         </el-menu-item>
         <el-menu-item index="/research">
           <el-icon><DataAnalysis /></el-icon>
@@ -41,6 +69,10 @@
         <el-menu-item index="/project-evals">
           <el-icon><Document /></el-icon>
           <span>项目评价</span>
+        </el-menu-item>
+        <el-menu-item index="/worklogs">
+          <el-icon><EditPen /></el-icon>
+          <span>工作日志</span>
         </el-menu-item>
         <el-menu-item index="/servers">
           <el-icon><Monitor /></el-icon>
@@ -68,7 +100,7 @@
 
 <script setup lang="ts">
 import { useRoute } from 'vue-router'
-import { Folder, Box, User, Trophy, Document, Setting, DataAnalysis, Monitor, Checked, VideoPlay, Connection, UserFilled } from '@element-plus/icons-vue'
+import { Folder, Box, User, Trophy, Document, Setting, DataAnalysis, Monitor, Checked, VideoPlay, Connection, UserFilled, Goods, House, OfficeBuilding, Avatar, Calendar, EditPen, Odometer } from '@element-plus/icons-vue'
 
 const route = useRoute()
 </script>

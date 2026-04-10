@@ -281,3 +281,98 @@ export const SimulationStatusLabels: Record<string, string> = {
   PASSED: '通过',
   FAILED: '未通过',
 }
+
+export interface Supplier {
+  id: number
+  supplierCode: string
+  fullName: string
+  shortName: string
+  supplierType: string
+  creditCode: string
+  contact: string
+  phone: string
+  address: string
+  settlementMethod: string
+  taxRate: number
+  enabled: boolean
+}
+
+export interface Warehouse {
+  id: number
+  warehouseCode: string
+  warehouseName: string
+  warehouseType: string
+  warehouseNature: string
+  managementMode: string
+  address: string
+  contact: string
+  phone: string
+  areaSqm: number
+  craneCount: number
+  enabled: boolean
+}
+
+export interface RelatedUnit {
+  id: number
+  unitCode: string
+  fullName: string
+  unitType: string
+  creditCode: string
+  contactPerson: string
+  phone: string
+  address: string
+  bankName: string
+  bankAccount: string
+  enabled: boolean
+}
+
+export interface TraineeProfile {
+  id: number
+  projectId: number
+  employeeName: string
+  role: string
+  department: string
+  kaUser: boolean
+  progressPercent: number
+  attendanceDays: number
+  totalDays: number
+  riskLevel: string
+}
+
+export interface TrainingDailyLog {
+  id: number
+  projectId: number
+  logDate: string
+  topic: string
+  trainerName: string
+  attendeeCount: number
+  signInCompleted: boolean
+  coursewareUploaded: boolean
+  summaryUploaded: boolean
+  examConducted: boolean
+  dailyReportSubmitted: boolean
+  issues: string
+}
+
+export interface EngineerWorklog {
+  id: number
+  engineerId: number
+  projectId: number
+  workDate: string
+  tasksPlan: string
+  tasksCompleted: string
+  documentsSubmitted: string
+  issues: string
+  nextDayPlan: string
+  status: string
+}
+
+export interface TrainingDashboard {
+  totalTrainees: number
+  kaUserCount: number
+  overallPassRate: number
+  moduleStats: { module: string; examCount: number; passRate: number }[]
+  attendanceRate: number
+  documentCompletionRate: number
+  goLiveReady: boolean
+}
