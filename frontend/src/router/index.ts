@@ -262,6 +262,12 @@ const router = createRouter({
           component: () => import('@/views/training/QaSessionList.vue'),
           meta: { title: '问答管理' },
         },
+        {
+          path: 'data-import',
+          name: 'DataImport',
+          component: () => import('@/views/dataimport/DataImportDashboard.vue'),
+          meta: { title: '数据治理' },
+        },
       ],
     },
   ],

@@ -67,6 +67,11 @@
           <el-menu-item index="/invoice-balances">发票期初</el-menu-item>
         </el-sub-menu>
 
+        <el-menu-item index="/data-import">
+          <el-icon><DataLine /></el-icon>
+          <span>数据治理</span>
+        </el-menu-item>
+
         <el-sub-menu index="training">
           <template #title>
             <el-icon><Trophy /></el-icon>
@@ -148,7 +153,7 @@
 import { useRoute, useRouter } from 'vue-router'
 import {
   Folder, Box, User, Trophy, Document, Setting, Monitor, UserFilled,
-  Avatar, Money, Coin, Cpu, MagicStick, SwitchButton, ChatDotSquare, Guide,
+  Avatar, Money, Coin, Cpu, MagicStick, SwitchButton, ChatDotSquare, Guide, DataLine,
 } from '@element-plus/icons-vue'
 import { useAuthStore } from '@/stores/auth'
 
