@@ -193,13 +193,44 @@ CREATE TABLE IF NOT EXISTS t_customer_profile (
     trade_mode VARCHAR(20),
     trade_scope VARCHAR(20),
     main_business VARCHAR(1000),
+    -- basic_info extended
+    legal_person VARCHAR(30),
+    registered_capital VARCHAR(30),
+    establishment_date DATE,
+    address VARCHAR(200),
+    -- production
     total_production_lines INT DEFAULT 0,
+    production_shifts VARCHAR(20),
+    mes_current_status VARCHAR(20),
+    quality_standards VARCHAR(200),
+    -- warehouse & inventory
     total_warehouse_count INT DEFAULT 0,
     total_warehouse_area_sqm DECIMAL(18,2),
     total_crane_count INT DEFAULT 0,
+    inventory_turnover_rate DECIMAL(8,2),
+    inventory_management_method VARCHAR(30),
+    -- sales
     monthly_volume DECIMAL(18,2),
     monthly_amount DECIMAL(18,2),
+    pricing_model VARCHAR(30),
+    settlement_methods VARCHAR(100),
+    credit_policy VARCHAR(200),
+    sales_mode VARCHAR(30),
+    -- customer_base
+    total_customer_count INT,
+    customer_types VARCHAR(200),
+    top_customers VARCHAR(500),
+    -- organization
     total_staff INT DEFAULT 0,
+    departments VARCHAR(500),
+    key_positions VARCHAR(500),
+    decision_chain VARCHAR(200),
+    -- existing_systems
+    existing_systems VARCHAR(1000),
+    -- project_scope
+    target_modules VARCHAR(500),
+    module_priorities VARCHAR(500),
+    -- goals
     management_goals VARCHAR(1000),
     process_goals VARCHAR(1000),
     efficiency_goals VARCHAR(1000),
@@ -687,4 +718,16 @@ CREATE TABLE IF NOT EXISTS t_qa_message (
     related_video_url VARCHAR(500),
     helpful BOOLEAN,
     create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Research Report (调研分析报告)
+CREATE TABLE IF NOT EXISTS t_research_report (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    project_id BIGINT NOT NULL,
+    profile_id BIGINT NOT NULL,
+    report_content TEXT,
+    overall_risk_level VARCHAR(10),
+    status VARCHAR(20) DEFAULT 'DRAFT',
+    create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    deleted INT DEFAULT 0
 );

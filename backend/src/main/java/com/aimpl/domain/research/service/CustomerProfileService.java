@@ -40,13 +40,44 @@ public class CustomerProfileService extends ServiceImpl<CustomerProfileMapper, C
         entity.setTradeMode(dto.getTradeMode());
         entity.setTradeScope(dto.getTradeScope());
         entity.setMainBusiness(dto.getMainBusiness());
+        // basic_info extended
+        entity.setLegalPerson(dto.getLegalPerson());
+        entity.setRegisteredCapital(dto.getRegisteredCapital());
+        entity.setEstablishmentDate(dto.getEstablishmentDate());
+        entity.setAddress(dto.getAddress());
+        // production
         entity.setTotalProductionLines(dto.getTotalProductionLines());
+        entity.setProductionShifts(dto.getProductionShifts());
+        entity.setMesCurrentStatus(dto.getMesCurrentStatus());
+        entity.setQualityStandards(dto.getQualityStandards());
+        // warehouse & inventory
         entity.setTotalWarehouseCount(dto.getTotalWarehouseCount());
         entity.setTotalWarehouseAreaSqm(dto.getTotalWarehouseAreaSqm());
         entity.setTotalCraneCount(dto.getTotalCraneCount());
+        entity.setInventoryTurnoverRate(dto.getInventoryTurnoverRate());
+        entity.setInventoryManagementMethod(dto.getInventoryManagementMethod());
+        // sales
         entity.setMonthlyVolume(dto.getMonthlyVolume());
         entity.setMonthlyAmount(dto.getMonthlyAmount());
+        entity.setPricingModel(dto.getPricingModel());
+        entity.setSettlementMethods(dto.getSettlementMethods());
+        entity.setCreditPolicy(dto.getCreditPolicy());
+        entity.setSalesMode(dto.getSalesMode());
+        // customer_base
+        entity.setTotalCustomerCount(dto.getTotalCustomerCount());
+        entity.setCustomerTypes(dto.getCustomerTypes());
+        entity.setTopCustomers(dto.getTopCustomers());
+        // organization
         entity.setTotalStaff(dto.getTotalStaff());
+        entity.setDepartments(dto.getDepartments());
+        entity.setKeyPositions(dto.getKeyPositions());
+        entity.setDecisionChain(dto.getDecisionChain());
+        // existing_systems
+        entity.setExistingSystems(dto.getExistingSystems());
+        // project_scope
+        entity.setTargetModules(dto.getTargetModules());
+        entity.setModulePriorities(dto.getModulePriorities());
+        // goals
         entity.setManagementGoals(dto.getManagementGoals());
         entity.setProcessGoals(dto.getProcessGoals());
         entity.setEfficiencyGoals(dto.getEfficiencyGoals());
