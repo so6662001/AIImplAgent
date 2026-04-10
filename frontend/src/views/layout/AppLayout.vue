@@ -26,6 +26,38 @@
           <el-icon><Trophy /></el-icon>
           <span>培训考核</span>
         </el-menu-item>
+        <el-menu-item index="/research">
+          <el-icon><DataAnalysis /></el-icon>
+          <span>调研分析</span>
+        </el-menu-item>
+        <el-menu-item index="/account-sets">
+          <el-icon><Setting /></el-icon>
+          <span>帐套管理</span>
+        </el-menu-item>
+        <el-menu-item index="/engineers">
+          <el-icon><UserFilled /></el-icon>
+          <span>工程师管理</span>
+        </el-menu-item>
+        <el-menu-item index="/project-evals">
+          <el-icon><Document /></el-icon>
+          <span>项目评价</span>
+        </el-menu-item>
+        <el-menu-item index="/servers">
+          <el-icon><Monitor /></el-icon>
+          <span>服务器管理</span>
+        </el-menu-item>
+        <el-menu-item index="/go-live-checks">
+          <el-icon><Checked /></el-icon>
+          <span>上线检查</span>
+        </el-menu-item>
+        <el-menu-item index="/simulations">
+          <el-icon><VideoPlay /></el-icon>
+          <span>模拟演练</span>
+        </el-menu-item>
+        <el-menu-item index="/reports">
+          <el-icon><Connection /></el-icon>
+          <span>交付报告</span>
+        </el-menu-item>
       </el-menu>
     </el-aside>
     <el-main class="main-content">
@@ -36,7 +68,7 @@
 
 <script setup lang="ts">
 import { useRoute } from 'vue-router'
-import { Folder, Box, User, Trophy } from '@element-plus/icons-vue'
+import { Folder, Box, User, Trophy, Document, Setting, DataAnalysis, Monitor, Checked, VideoPlay, Connection, UserFilled } from '@element-plus/icons-vue'
 
 const route = useRoute()
 </script>

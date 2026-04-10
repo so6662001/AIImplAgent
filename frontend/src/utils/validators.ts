@@ -53,3 +53,55 @@ export const scoreRule: FormItemRule = {
   },
   trigger: 'blur',
 }
+
+export const portRule: FormItemRule = {
+  validator: (_rule, value, callback) => {
+    if (value === undefined || value === null || value === '') {
+      callback()
+      return
+    }
+    const n = Number(value)
+    if (!Number.isInteger(n) || n < 1 || n > 65535) {
+      callback(new Error('端口号必须为1~65535的整数'))
+      return
+    }
+    callback()
+  },
+  trigger: 'blur',
+}
+
+export const urlRule: FormItemRule = {
+  pattern: /^(https?:\/\/[^\s]+)?$/,
+  message: '请输入正确的URL地址（http://或https://开头）',
+  trigger: 'blur',
+}
+
+export const percentRule: FormItemRule = {
+  validator: (_rule, value, callback) => {
+    if (value === undefined || value === null || value === '') {
+      callback()
+      return
+    }
+    const n = Number(value)
+    if (isNaN(n) || n < 0 || n > 100) {
+      callback(new Error('数值必须在0~100之间'))
+      return
+    }
+    callback()
+  },
+  trigger: 'blur',
+}
+
+export const issuesRule = (form: { totalIssues: number; resolvedIssues: number }): FormItemRule => ({
+  validator: (_rule, value, callback) => {
+    if (value !== undefined && value !== null && value !== '') {
+      const n = Number(value)
+      if (n > form.totalIssues) {
+        callback(new Error('已解决问题数不能大于问题总数'))
+        return
+      }
+    }
+    callback()
+  },
+  trigger: 'blur',
+})

@@ -111,3 +111,173 @@ export const ProjectStatusLabels: Record<string, string> = {
   DELIVERED: '已交付',
   AFTER_SALES: '售后阶段',
 }
+
+export interface CustomerProfile {
+  id: number
+  projectId: number
+  companyName: string
+  industryType: string
+  businessModel: string
+  tradeMode: string
+  tradeScope: string
+  mainBusiness: string
+  totalProductionLines: number
+  totalWarehouseCount: number
+  totalWarehouseAreaSqm: number
+  totalCraneCount: number
+  monthlyVolume: number
+  monthlyAmount: number
+  totalStaff: number
+  managementGoals: string
+  processGoals: string
+  efficiencyGoals: string
+  riskControlGoals: string
+}
+
+export interface AccountSet {
+  id: number
+  projectId: number
+  setName: string
+  accountingSystem: string
+  pricingMethod: string
+  qtyDecimals: number
+  wgtDecimals: number
+  prcDecimals: number
+  amtDecimals: number
+  useWeight: boolean
+  currency: string
+  fiscalYearStart: number
+  status: string
+}
+
+export interface DeliveryReport {
+  id: number
+  projectId: number
+  reportType: string
+  title: string
+  trainingPassRate: number
+  dataImportCompletionRate: number
+  totalIssues: number
+  resolvedIssues: number
+  customerSatisfactionScore: number
+  scheduleDeviationPercent: number
+  documentCompletionRate: number
+  overallScore: number
+  aiComment: string
+  status: string
+  confirmedBy: string
+  confirmedAt: string
+}
+
+export interface Engineer {
+  id: number
+  engineerCode: string
+  name: string
+  level: string
+  skills: string
+  currentStatus: string
+  currentProjectId: number | null
+  joinDate: string
+  phone: string
+  email: string
+  compositeScore: number
+  monthlyIdleRate: number
+  monthlyProjectCount: number
+}
+
+export interface ProjectEvaluation {
+  id: number
+  projectId: number
+  evaluatorId: number
+  scheduleScore: number
+  qualityScore: number
+  csatScore: number
+  processScore: number
+  costScore: number
+  pqiScore: number
+  rating: string
+  aiComment: string
+}
+
+export interface ServerProfile {
+  id: number
+  projectId: number
+  serverName: string
+  host: string
+  port: number
+  dbType: string
+  dbName: string
+  sslEnabled: boolean
+  osType: string
+  erpVersion: string
+  apiBaseUrl: string
+  status: string
+  lastHealthCheck: string
+  networkLatencyMs: number
+}
+
+export interface GoLiveCheckItem {
+  id: number
+  projectId: number
+  category: string
+  itemName: string
+  description: string
+  checkResult: string
+  detail: string
+  checkedAt: string
+  checkedBy: string
+}
+
+export interface SimulationScene {
+  id: number
+  projectId: number
+  sceneName: string
+  sceneType: string
+  description: string
+  steps: string
+  expectedResult: string
+  actualResult: string
+  status: string
+  executedAt: string
+  executedBy: string
+  deviation: string
+}
+
+export const EngineerLevelLabels: Record<string, string> = {
+  INTERN: '实习',
+  JUNIOR: '初级实施',
+  MIDDLE: '中级实施',
+  SENIOR: '高级实施',
+  PM: 'PM',
+  SENIOR_PM: '高级PM',
+  EXPERT_PM: '资深PM',
+}
+
+export const EngineerStatusLabels: Record<string, string> = {
+  IDLE: '空闲',
+  ON_PROJECT: '在项目',
+  TRAINING: '培训中',
+  LEAVE: '请假',
+}
+
+export const EvalRatingLabels: Record<string, string> = {
+  EXCELLENT: '卓越',
+  GOOD: '优良',
+  QUALIFIED: '合格',
+  NEEDS_IMPROVEMENT: '待改进',
+  UNQUALIFIED: '不合格',
+}
+
+export const CheckResultLabels: Record<string, string> = {
+  PASS: '通过',
+  FAIL: '未通过',
+  WARNING: '警告',
+  UNCHECKED: '未检查',
+}
+
+export const SimulationStatusLabels: Record<string, string> = {
+  PENDING: '待执行',
+  RUNNING: '执行中',
+  PASSED: '通过',
+  FAILED: '未通过',
+}
