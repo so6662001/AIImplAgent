@@ -1,8 +1,8 @@
 package com.aimpl.config;
 
-import com.aimpl.domain.auth.service.JwtService;
+import com.aimpl.domain.qa.entity.ClientUser;
+import com.aimpl.domain.qa.service.ClientAuthService;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -17,9 +17,9 @@ import java.util.Map;
 
 @Slf4j
 @RequiredArgsConstructor
-public class JwtAuthFilter extends OncePerRequestFilter {
+public class ClientAuthFilter extends OncePerRequestFilter {
 
-    private final JwtService jwtService;
+    private final ClientAuthService clientAuthService;
     private final ObjectMapper objectMapper;
     private boolean enabled = true;
 
@@ -33,25 +33,12 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             return true;
         }
         String path = request.getRequestURI();
-        String method = request.getMethod();
 
-        if ("OPTIONS".equalsIgnoreCase(method)) {
+        if (!path.startsWith("/api/client/")) {
             return true;
         }
 
-        if (path.startsWith("/api/auth/login") || path.startsWith("/api/auth/register")) {
-            return true;
-        }
-
-        if (path.startsWith("/api/client/")) {
-            return true;
-        }
-
-        if (path.startsWith("/h2")) {
-            return true;
-        }
-
-        if (!path.startsWith("/api/")) {
+        if (path.startsWith("/api/client/auth/")) {
             return true;
         }
 
@@ -62,27 +49,29 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
-        String header = request.getHeader("Authorization");
+        String token = request.getHeader("X-Client-Token");
 
-        if (header == null || !header.startsWith("Bearer ")) {
+        if (token == null || token.isBlank()) {
             writeUnauthorized(response);
             return;
         }
 
-        String token = header.substring(7);
-
         try {
-            Claims claims = jwtService.parseToken(token);
-            if (claims.getExpiration().before(new java.util.Date())) {
+            ClientUser user = clientAuthService.validateToken(token);
+            if (user == null) {
                 writeUnauthorized(response);
                 return;
             }
-            request.setAttribute("currentUser", claims.getSubject());
-            request.setAttribute("currentUserId", claims.get("userId"));
-            request.setAttribute("currentUserRole", claims.get("role"));
+
+            request.setAttribute("clientUserId", user.getId());
+            request.setAttribute("projectId", user.getProjectId());
+            request.setAttribute("employeeName", user.getEmployeeName());
+
+            clientAuthService.updateLastActiveTime(user.getId());
+
             filterChain.doFilter(request, response);
         } catch (Exception e) {
-            log.debug("JWT validation failed: {}", e.getMessage());
+            log.debug("Client token validation failed: {}", e.getMessage());
             writeUnauthorized(response);
         }
     }
@@ -93,7 +82,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         response.setCharacterEncoding("UTF-8");
         Map<String, Object> body = Map.of(
                 "code", 401,
-                "message", "未登录或登录已过期"
+                "message", "客户端令牌无效或已过期"
         );
         response.getWriter().write(objectMapper.writeValueAsString(body));
     }

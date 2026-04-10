@@ -648,3 +648,42 @@ CREATE TABLE IF NOT EXISTS t_required_course (
     create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     deleted INT DEFAULT 0
 );
+
+-- Client User (客户端用户 — 培训学员)
+CREATE TABLE IF NOT EXISTS t_client_user (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    project_id BIGINT NOT NULL,
+    employee_name VARCHAR(30) NOT NULL,
+    role VARCHAR(30),
+    department VARCHAR(30),
+    access_token VARCHAR(64) NOT NULL UNIQUE,
+    enabled BOOLEAN DEFAULT TRUE,
+    last_active_time TIMESTAMP,
+    create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    deleted INT DEFAULT 0
+);
+
+-- QA Session (问答会话)
+CREATE TABLE IF NOT EXISTS t_qa_session (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    project_id BIGINT NOT NULL,
+    client_user_id BIGINT NOT NULL,
+    title VARCHAR(60),
+    status VARCHAR(20) DEFAULT 'ACTIVE',
+    message_count INT DEFAULT 0,
+    create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    update_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    deleted INT DEFAULT 0
+);
+
+-- QA Message (问答消息)
+CREATE TABLE IF NOT EXISTS t_qa_message (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    session_id BIGINT NOT NULL,
+    role VARCHAR(20) NOT NULL,
+    content TEXT NOT NULL,
+    related_module VARCHAR(60),
+    related_video_url VARCHAR(500),
+    helpful BOOLEAN,
+    create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
