@@ -362,3 +362,240 @@ CREATE TABLE IF NOT EXISTS t_engineer_worklog (
     update_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     deleted INT DEFAULT 0
 );
+
+-- Department (部门)
+CREATE TABLE IF NOT EXISTS t_department (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    dept_code VARCHAR(20) NOT NULL UNIQUE,
+    dept_name VARCHAR(60) NOT NULL,
+    parent_id BIGINT,
+    manager_id BIGINT,
+    sort_order INT DEFAULT 0,
+    enabled BOOLEAN DEFAULT TRUE,
+    create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    deleted INT DEFAULT 0
+);
+
+-- Employee (员工)
+CREATE TABLE IF NOT EXISTS t_employee (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    employee_code VARCHAR(20) NOT NULL UNIQUE,
+    name VARCHAR(30) NOT NULL,
+    gender VARCHAR(10),
+    id_card VARCHAR(18),
+    phone VARCHAR(20),
+    email VARCHAR(60),
+    dept_id BIGINT,
+    position VARCHAR(30),
+    join_date DATE,
+    enabled BOOLEAN DEFAULT TRUE,
+    create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    deleted INT DEFAULT 0
+);
+
+-- Bank Account (银行账户)
+CREATE TABLE IF NOT EXISTS t_bank_account (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    account_code VARCHAR(20) NOT NULL UNIQUE,
+    account_name VARCHAR(60) NOT NULL,
+    account_type VARCHAR(20) NOT NULL,
+    bank_name VARCHAR(60),
+    bank_account_no VARCHAR(40),
+    bank_branch VARCHAR(100),
+    currency VARCHAR(10) DEFAULT 'CNY',
+    subject_code VARCHAR(20),
+    enabled BOOLEAN DEFAULT TRUE,
+    create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    deleted INT DEFAULT 0
+);
+
+-- Storage Location (库位)
+CREATE TABLE IF NOT EXISTS t_storage_location (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    location_code VARCHAR(20) NOT NULL UNIQUE,
+    location_name VARCHAR(60) NOT NULL,
+    warehouse_id BIGINT NOT NULL,
+    location_type VARCHAR(20),
+    enabled BOOLEAN DEFAULT TRUE,
+    create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    deleted INT DEFAULT 0
+);
+
+-- Account Subject (会计科目)
+CREATE TABLE IF NOT EXISTS t_account_subject (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    subject_code VARCHAR(20) NOT NULL UNIQUE,
+    subject_name VARCHAR(60) NOT NULL,
+    parent_code VARCHAR(20),
+    subject_category VARCHAR(20) NOT NULL,
+    balance_direction VARCHAR(10) NOT NULL,
+    auxiliary_accounting VARCHAR(200),
+    is_leaf BOOLEAN DEFAULT TRUE,
+    enabled BOOLEAN DEFAULT TRUE,
+    create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    deleted INT DEFAULT 0
+);
+
+-- Inventory Balance (库存期初余额)
+CREATE TABLE IF NOT EXISTS t_inventory_balance (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    project_id BIGINT NOT NULL,
+    product_id BIGINT NOT NULL,
+    warehouse_id BIGINT NOT NULL,
+    location_id BIGINT,
+    batch_no VARCHAR(40),
+    inbound_date DATE,
+    quantity DECIMAL(18,4),
+    weight DECIMAL(18,4),
+    pack_quantity DECIMAL(18,4),
+    cost_unit_price DECIMAL(18,4),
+    whole_units DECIMAL(18,4),
+    odd_units DECIMAL(18,4),
+    cost_amount DECIMAL(18,2),
+    unit_weight DECIMAL(18,3),
+    create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    deleted INT DEFAULT 0
+);
+
+-- Customer Balance (客户期初余额)
+CREATE TABLE IF NOT EXISTS t_customer_balance (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    project_id BIGINT NOT NULL,
+    customer_id BIGINT NOT NULL,
+    doc_type VARCHAR(30),
+    doc_no VARCHAR(40),
+    doc_date DATE,
+    receivable_amount DECIMAL(18,2),
+    received_amount DECIMAL(18,2),
+    balance DECIMAL(18,2) NOT NULL,
+    balance_type VARCHAR(20),
+    expected_date DATE,
+    remark VARCHAR(500),
+    create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    deleted INT DEFAULT 0
+);
+
+-- Supplier Balance (供应商期初余额)
+CREATE TABLE IF NOT EXISTS t_supplier_balance (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    project_id BIGINT NOT NULL,
+    supplier_id BIGINT NOT NULL,
+    doc_type VARCHAR(30),
+    doc_no VARCHAR(40),
+    doc_date DATE,
+    payable_amount DECIMAL(18,2),
+    paid_amount DECIMAL(18,2),
+    balance DECIMAL(18,2) NOT NULL,
+    balance_type VARCHAR(20),
+    expected_date DATE,
+    remark VARCHAR(500),
+    create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    deleted INT DEFAULT 0
+);
+
+-- Account Balance (银行账户期初余额)
+CREATE TABLE IF NOT EXISTS t_account_balance (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    project_id BIGINT NOT NULL,
+    bank_account_id BIGINT NOT NULL,
+    currency VARCHAR(10) DEFAULT 'CNY',
+    opening_balance DECIMAL(18,2) NOT NULL,
+    remark VARCHAR(500),
+    create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    deleted INT DEFAULT 0
+);
+
+-- Subject Balance (科目期初余额)
+CREATE TABLE IF NOT EXISTS t_subject_balance (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    project_id BIGINT NOT NULL,
+    subject_code VARCHAR(20) NOT NULL,
+    subject_name VARCHAR(60),
+    debit_balance DECIMAL(18,2) DEFAULT 0,
+    credit_balance DECIMAL(18,2) DEFAULT 0,
+    create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    deleted INT DEFAULT 0
+);
+
+-- Other Receivable (其他应收)
+CREATE TABLE IF NOT EXISTS t_other_receivable (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    project_id BIGINT NOT NULL,
+    subject_code VARCHAR(20),
+    object_type VARCHAR(20),
+    object_id BIGINT,
+    object_name VARCHAR(60),
+    summary VARCHAR(200),
+    amount DECIMAL(18,2),
+    occur_date DATE,
+    remark VARCHAR(500),
+    create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    deleted INT DEFAULT 0
+);
+
+-- Other Payable (其他应付)
+CREATE TABLE IF NOT EXISTS t_other_payable (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    project_id BIGINT NOT NULL,
+    subject_code VARCHAR(20),
+    object_type VARCHAR(20),
+    object_id BIGINT,
+    object_name VARCHAR(60),
+    summary VARCHAR(200),
+    amount DECIMAL(18,2),
+    occur_date DATE,
+    remark VARCHAR(500),
+    create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    deleted INT DEFAULT 0
+);
+
+-- Invoice Balance (发票期初余额)
+CREATE TABLE IF NOT EXISTS t_invoice_balance (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    project_id BIGINT NOT NULL,
+    invoice_type VARCHAR(20) NOT NULL,
+    counterparty_id BIGINT,
+    counterparty_name VARCHAR(120),
+    doc_no VARCHAR(40),
+    product_id BIGINT,
+    product_name VARCHAR(60),
+    spec VARCHAR(80),
+    material VARCHAR(30),
+    quantity DECIMAL(18,4),
+    unit_price DECIMAL(18,4),
+    amount DECIMAL(18,2),
+    tax_rate DECIMAL(5,4),
+    tax_amount DECIMAL(18,2),
+    total_amount DECIMAL(18,2),
+    doc_date DATE,
+    remark VARCHAR(500),
+    create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    deleted INT DEFAULT 0
+);
+
+-- Project Plan (项目计划)
+CREATE TABLE IF NOT EXISTS t_project_plan (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    project_id BIGINT NOT NULL,
+    plan_name VARCHAR(100) NOT NULL,
+    total_days INT,
+    milestones TEXT,
+    wbs_items TEXT,
+    resources TEXT,
+    risks TEXT,
+    status VARCHAR(20) DEFAULT 'DRAFT',
+    create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    update_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    deleted INT DEFAULT 0
+);
+
+-- Required Course (KA必修课程矩阵)
+CREATE TABLE IF NOT EXISTS t_required_course (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    industry_type VARCHAR(30) NOT NULL,
+    course_module VARCHAR(50) NOT NULL,
+    ka_required BOOLEAN DEFAULT FALSE,
+    sort_order INT DEFAULT 0,
+    create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    deleted INT DEFAULT 0
+);
