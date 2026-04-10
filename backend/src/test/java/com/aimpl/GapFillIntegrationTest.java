@@ -1041,6 +1041,7 @@ class GapFillIntegrationTest {
         Long projectId = createProject("GF-DASH-DOC");
 
         TrainingDailyLogCreateDTO log = validDailyLogDTO(projectId, LocalDate.of(2024, 9, 1));
+        log.setPlanUploaded(true);
         log.setSignInCompleted(true);
         log.setCoursewareUploaded(true);
         log.setSummaryUploaded(true);

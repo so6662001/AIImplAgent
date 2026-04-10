@@ -29,6 +29,7 @@ public class ExamService extends ServiceImpl<ExamRecordMapper, ExamRecord> {
     private final TraineeProfileMapper traineeMapper;
     private final ProjectMapper projectMapper;
     private final RequiredCourseService requiredCourseService;
+    private final TraineeProgressService traineeProgressService;
 
     @Transactional
     public ExamRecord submitExam(ExamRecordCreateDTO dto) {
@@ -52,6 +53,7 @@ public class ExamService extends ServiceImpl<ExamRecordMapper, ExamRecord> {
         record.setRetryOf(dto.getRetryOf());
         record.setExamTime(LocalDateTime.now());
         save(record);
+        traineeProgressService.recalculateProgress(dto.getProjectId());
         return record;
     }
 

@@ -432,6 +432,7 @@ CREATE TABLE IF NOT EXISTS t_training_daily_log (
     topic VARCHAR(100) NOT NULL,
     trainer_name VARCHAR(30),
     attendee_count INT DEFAULT 0,
+    plan_uploaded BOOLEAN DEFAULT FALSE,
     sign_in_completed BOOLEAN DEFAULT FALSE,
     courseware_uploaded BOOLEAN DEFAULT FALSE,
     summary_uploaded BOOLEAN DEFAULT FALSE,

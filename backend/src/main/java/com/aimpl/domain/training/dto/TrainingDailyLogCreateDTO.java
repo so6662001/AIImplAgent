@@ -26,6 +26,7 @@ public class TrainingDailyLogCreateDTO {
     @Max(value = 10000, message = "参训人数不能超过10000")
     private Integer attendeeCount;
 
+    private Boolean planUploaded;
     private Boolean signInCompleted;
     private Boolean coursewareUploaded;
     private Boolean summaryUploaded;

@@ -18,6 +18,7 @@ import java.util.List;
 public class TrainingDailyLogService extends ServiceImpl<TrainingDailyLogMapper, TrainingDailyLog> {
 
     private final ProjectMapper projectMapper;
+    private final TraineeProgressService traineeProgressService;
 
     @Transactional
     public TrainingDailyLog createLog(TrainingDailyLogCreateDTO dto) {
@@ -37,6 +38,7 @@ public class TrainingDailyLogService extends ServiceImpl<TrainingDailyLogMapper,
         log.setTopic(dto.getTopic());
         log.setTrainerName(dto.getTrainerName());
         log.setAttendeeCount(dto.getAttendeeCount());
+        log.setPlanUploaded(dto.getPlanUploaded() != null && dto.getPlanUploaded());
         log.setSignInCompleted(dto.getSignInCompleted() != null && dto.getSignInCompleted());
         log.setCoursewareUploaded(dto.getCoursewareUploaded() != null && dto.getCoursewareUploaded());
         log.setSummaryUploaded(dto.getSummaryUploaded() != null && dto.getSummaryUploaded());
@@ -44,6 +46,7 @@ public class TrainingDailyLogService extends ServiceImpl<TrainingDailyLogMapper,
         log.setDailyReportSubmitted(dto.getDailyReportSubmitted() != null && dto.getDailyReportSubmitted());
         log.setIssues(dto.getIssues());
         save(log);
+        traineeProgressService.recalculateProgress(dto.getProjectId());
         return log;
     }
 
@@ -53,6 +56,7 @@ public class TrainingDailyLogService extends ServiceImpl<TrainingDailyLogMapper,
         if (existing == null) {
             throw new BizException("培训日志不存在: " + id);
         }
+        if (update.getPlanUploaded() != null) existing.setPlanUploaded(update.getPlanUploaded());
         if (update.getSignInCompleted() != null) existing.setSignInCompleted(update.getSignInCompleted());
         if (update.getCoursewareUploaded() != null) existing.setCoursewareUploaded(update.getCoursewareUploaded());
         if (update.getSummaryUploaded() != null) existing.setSummaryUploaded(update.getSummaryUploaded());
@@ -60,6 +64,7 @@ public class TrainingDailyLogService extends ServiceImpl<TrainingDailyLogMapper,
         if (update.getDailyReportSubmitted() != null) existing.setDailyReportSubmitted(update.getDailyReportSubmitted());
         if (update.getIssues() != null) existing.setIssues(update.getIssues());
         updateById(existing);
+        traineeProgressService.recalculateProgress(existing.getProjectId());
         return existing;
     }
 

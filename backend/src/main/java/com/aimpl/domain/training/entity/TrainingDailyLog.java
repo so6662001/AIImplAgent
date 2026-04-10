@@ -23,6 +23,8 @@ public class TrainingDailyLog {
 
     private Integer attendeeCount;
 
+    private Boolean planUploaded;
+
     private Boolean signInCompleted;
 
     private Boolean coursewareUploaded;
