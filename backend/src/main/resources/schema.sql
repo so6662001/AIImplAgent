@@ -374,6 +374,21 @@ CREATE TABLE IF NOT EXISTS t_simulation_scene (
     deleted INT DEFAULT 0
 );
 
+-- Simulation Report (模拟演练报告)
+CREATE TABLE IF NOT EXISTS t_simulation_report (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    project_id BIGINT NOT NULL,
+    total_scenes INT DEFAULT 0,
+    passed_scenes INT DEFAULT 0,
+    failed_scenes INT DEFAULT 0,
+    overall_pass_rate DECIMAL(6,2),
+    overall_score DECIMAL(6,2),
+    ready_for_training BOOLEAN DEFAULT FALSE,
+    report_content TEXT,
+    create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    deleted INT DEFAULT 0
+);
+
 -- Supplier (供应商)
 CREATE TABLE IF NOT EXISTS t_supplier (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
