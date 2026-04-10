@@ -665,6 +665,13 @@ CREATE TABLE IF NOT EXISTS t_project_plan (
     resources TEXT,
     risks TEXT,
     status VARCHAR(20) DEFAULT 'DRAFT',
+    customization_level VARCHAR(20),
+    deadline DATE,
+    budget VARCHAR(50),
+    integration_requirements VARCHAR(500),
+    gantt_data TEXT,
+    risk_level VARCHAR(10),
+    auto_generated BOOLEAN DEFAULT FALSE,
     create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     update_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     deleted INT DEFAULT 0
