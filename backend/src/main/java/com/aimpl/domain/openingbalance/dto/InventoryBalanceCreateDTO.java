@@ -1,7 +1,6 @@
 package com.aimpl.domain.openingbalance.dto;
 
-import jakarta.validation.constraints.DecimalMin;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.*;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -21,6 +20,7 @@ public class InventoryBalanceCreateDTO {
 
     private Long locationId;
 
+    @Size(max = 40, message = "批次号长度不能超过40")
     private String batchNo;
 
     private LocalDate inboundDate;

@@ -17,6 +17,7 @@ public class ExamRecordCreateDTO {
     private String module;
 
     @NotBlank(message = "考核类型不能为空")
+    @Size(max = 20, message = "考核类型长度不能超过20")
     private String examType;
 
     @NotNull(message = "考核分数不能为空")
@@ -26,6 +27,7 @@ public class ExamRecordCreateDTO {
 
     private Boolean requiredCourse;
 
+    @Size(max = 500, message = "薄弱点长度不能超过500")
     private String weakPoints;
 
     private Long retryOf;

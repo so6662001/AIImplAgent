@@ -1,9 +1,6 @@
 package com.aimpl.domain.openingbalance.dto;
 
-import jakarta.validation.constraints.DecimalMax;
-import jakarta.validation.constraints.DecimalMin;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.*;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -16,22 +13,28 @@ public class InvoiceBalanceCreateDTO {
     private Long projectId;
 
     @NotBlank(message = "发票类型不能为空")
+    @Size(max = 20, message = "发票类型长度不能超过20")
     private String invoiceType;
 
     @NotNull(message = "往来单位ID不能为空")
     private Long counterpartyId;
 
+    @Size(max = 120, message = "往来单位名称长度不能超过120")
     private String counterpartyName;
 
+    @Size(max = 40, message = "单据编号长度不能超过40")
     private String docNo;
 
     @NotNull(message = "货品ID不能为空")
     private Long productId;
 
+    @Size(max = 60, message = "货品名称长度不能超过60")
     private String productName;
 
+    @Size(max = 80, message = "规格长度不能超过80")
     private String spec;
 
+    @Size(max = 30, message = "材质长度不能超过30")
     private String material;
 
     @NotNull(message = "数量不能为空")
@@ -53,5 +56,6 @@ public class InvoiceBalanceCreateDTO {
 
     private LocalDate docDate;
 
+    @Size(max = 500, message = "备注长度不能超过500")
     private String remark;
 }

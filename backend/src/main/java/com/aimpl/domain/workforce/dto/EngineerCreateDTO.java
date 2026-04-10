@@ -17,8 +17,10 @@ public class EngineerCreateDTO {
     private String name;
 
     @NotBlank(message = "级别不能为空")
+    @Size(max = 20, message = "级别长度不能超过20")
     private String level;
 
+    @Size(max = 500, message = "技能描述长度不能超过500")
     private String skills;
 
     private LocalDate joinDate;

@@ -16,10 +16,13 @@ public class WarehouseCreateDTO {
     @Size(max = 60, message = "仓库名称长度不能超过60")
     private String warehouseName;
 
+    @Size(max = 20, message = "仓库类型长度不能超过20")
     private String warehouseType;
 
+    @Size(max = 20, message = "仓库性质长度不能超过20")
     private String warehouseNature;
 
+    @Size(max = 20, message = "管理方式长度不能超过20")
     private String managementMode;
 
     @Size(max = 200, message = "地址长度不能超过200")
@@ -36,6 +39,7 @@ public class WarehouseCreateDTO {
     private BigDecimal areaSqm;
 
     @Min(value = 0, message = "行车数量不能为负数")
+    @Max(value = 9999, message = "行车数量过大")
     private Integer craneCount;
 
     private Boolean enabled;

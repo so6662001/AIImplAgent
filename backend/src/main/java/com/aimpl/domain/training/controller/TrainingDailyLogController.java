@@ -28,7 +28,7 @@ public class TrainingDailyLogController {
     }
 
     @PutMapping("/{id}")
-    public R<TrainingDailyLog> update(@PathVariable Long id, @RequestBody TrainingDailyLog update) {
+    public R<TrainingDailyLog> update(@PathVariable Long id, @Valid @RequestBody TrainingDailyLog update) {
         return R.ok(trainingDailyLogService.updateLog(id, update));
     }
 }

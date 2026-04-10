@@ -14,6 +14,7 @@ public class TraineeProfileCreateDTO {
     private String employeeName;
 
     @NotBlank(message = "角色不能为空")
+    @Size(max = 30, message = "角色长度不能超过30")
     private String role;
 
     @Size(max = 30, message = "部门长度不能超过30")

@@ -31,10 +31,13 @@ public class ServerProfileCreateDTO {
 
     private Boolean sslEnabled;
 
+    @Size(max = 30, message = "操作系统类型长度不能超过30")
     private String osType;
 
+    @Size(max = 30, message = "ERP版本长度不能超过30")
     private String erpVersion;
 
     @Pattern(regexp = "^(https?://.*)?$", message = "API地址格式不正确")
+    @Size(max = 500, message = "API地址长度不能超过500")
     private String apiBaseUrl;
 }

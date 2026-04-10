@@ -29,7 +29,9 @@ public class RelatedUnitCreateDTO {
     @Size(max = 200, message = "地址长度不能超过200")
     private String address;
 
+    @Size(max = 60, message = "银行名称长度不能超过60")
     private String bankName;
 
+    @Size(max = 40, message = "银行账号长度不能超过40")
     private String bankAccount;
 }

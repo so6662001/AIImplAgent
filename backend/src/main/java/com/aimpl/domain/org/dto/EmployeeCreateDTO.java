@@ -30,6 +30,7 @@ public class EmployeeCreateDTO {
     @NotNull(message = "部门ID不能为空")
     private Long deptId;
 
+    @Size(max = 30, message = "职位长度不能超过30")
     private String position;
 
     private LocalDate joinDate;

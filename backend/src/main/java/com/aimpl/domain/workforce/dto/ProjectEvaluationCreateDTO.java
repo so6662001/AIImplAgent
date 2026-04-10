@@ -36,5 +36,6 @@ public class ProjectEvaluationCreateDTO {
     @Max(value = 100, message = "成本评分不能超过100")
     private Integer costScore;
 
+    @Size(max = 2000, message = "AI评语长度不能超过2000")
     private String aiComment;
 }

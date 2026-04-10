@@ -1,8 +1,6 @@
 package com.aimpl.domain.archive.dto;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.Data;
 
 @Data
@@ -19,6 +17,7 @@ public class StorageLocationCreateDTO {
     @NotNull(message = "仓库ID不能为空")
     private Long warehouseId;
 
+    @Size(max = 20, message = "库位类型长度不能超过20")
     private String locationType;
 
     private Boolean enabled;

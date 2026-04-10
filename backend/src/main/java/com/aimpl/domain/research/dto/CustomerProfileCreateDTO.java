@@ -27,6 +27,7 @@ public class CustomerProfileCreateDTO {
 
     private TradeScope tradeScope;
 
+    @Size(max = 1000, message = "主营业务长度不能超过1000")
     private String mainBusiness;
 
     @Min(value = 0, message = "产线数量不能为负数")
@@ -50,11 +51,15 @@ public class CustomerProfileCreateDTO {
     @Max(value = 100000, message = "员工数量不能超过100000")
     private Integer totalStaff;
 
+    @Size(max = 1000, message = "管理目标长度不能超过1000")
     private String managementGoals;
 
+    @Size(max = 1000, message = "流程目标长度不能超过1000")
     private String processGoals;
 
+    @Size(max = 1000, message = "效率目标长度不能超过1000")
     private String efficiencyGoals;
 
+    @Size(max = 1000, message = "风控目标长度不能超过1000")
     private String riskControlGoals;
 }

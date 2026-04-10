@@ -19,6 +19,7 @@ public class SupplierCreateDTO {
     @Size(max = 40, message = "供应商简称长度不能超过40")
     private String shortName;
 
+    @Size(max = 20, message = "供应商类型长度不能超过20")
     private String supplierType;
 
     @Pattern(regexp = "^$|^[0-9A-Za-z]{18}$", message = "统一社会信用代码必须为18位字母数字")
@@ -33,6 +34,7 @@ public class SupplierCreateDTO {
     @Size(max = 200, message = "地址长度不能超过200")
     private String address;
 
+    @Size(max = 20, message = "结算方式长度不能超过20")
     private String settlementMethod;
 
     @DecimalMin(value = "0", message = "税率不能为负数")

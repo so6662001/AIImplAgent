@@ -1,7 +1,6 @@
 package com.aimpl.domain.org.dto;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.Data;
 
 @Data
@@ -19,6 +18,8 @@ public class DepartmentCreateDTO {
 
     private Long managerId;
 
+    @Min(value = 0, message = "排序值不能为负数")
+    @Max(value = 999999, message = "排序值过大")
     private Integer sortOrder;
 
     private Boolean enabled;

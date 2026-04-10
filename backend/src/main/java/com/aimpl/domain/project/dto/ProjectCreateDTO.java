@@ -24,6 +24,7 @@ public class ProjectCreateDTO {
     private IndustryType industryType;
 
     @NotBlank(message = "企业规模不能为空")
+    @Size(max = 20, message = "企业规模长度不能超过20")
     private String scale;
 
     @NotNull(message = "请指定项目经理")
@@ -36,5 +37,6 @@ public class ProjectCreateDTO {
 
     private LocalDate startDate;
 
+    @Size(max = 500, message = "备注长度不能超过500")
     private String remark;
 }

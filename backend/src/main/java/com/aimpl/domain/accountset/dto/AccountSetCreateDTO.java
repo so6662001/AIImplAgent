@@ -37,6 +37,7 @@ public class AccountSetCreateDTO {
 
     private Boolean useWeight;
 
+    @Size(max = 10, message = "币种长度不能超过10")
     private String currency;
 
     @Min(value = 1, message = "财年起始月份不能小于1")
