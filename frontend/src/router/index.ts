@@ -1,8 +1,15 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import { useAuthStore } from '@/stores/auth'
 
 const router = createRouter({
   history: createWebHistory(),
   routes: [
+    {
+      path: '/login',
+      name: 'Login',
+      component: () => import('@/views/auth/LoginPage.vue'),
+      meta: { title: '登录', public: true },
+    },
     {
       path: '/',
       component: () => import('@/views/layout/AppLayout.vue'),
@@ -218,9 +225,31 @@ const router = createRouter({
           component: () => import('@/views/training/RequiredCourseList.vue'),
           meta: { title: 'KA必学课程' },
         },
+        {
+          path: 'llm-providers',
+          name: 'LlmProviders',
+          component: () => import('@/views/agent/LlmProviderList.vue'),
+          meta: { title: 'LLM模型配置' },
+        },
+        {
+          path: 'agent-configs',
+          name: 'AgentConfigs',
+          component: () => import('@/views/agent/AgentConfigList.vue'),
+          meta: { title: '智能体配置' },
+        },
       ],
     },
   ],
+})
+
+router.beforeEach((to) => {
+  const authStore = useAuthStore()
+  if (!authStore.isLoggedIn && !to.meta.public) {
+    return '/login'
+  }
+  if (authStore.isLoggedIn && to.path === '/login') {
+    return '/projects'
+  }
 })
 
 export default router

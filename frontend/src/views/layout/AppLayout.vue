@@ -101,7 +101,33 @@
           <el-icon><Monitor /></el-icon>
           <span>服务器管理</span>
         </el-menu-item>
+
+        <el-sub-menu index="sys-config">
+          <template #title>
+            <el-icon><Setting /></el-icon>
+            <span>系统配置</span>
+          </template>
+          <el-menu-item index="/llm-providers">
+            <el-icon><Cpu /></el-icon>
+            <span>LLM模型配置</span>
+          </el-menu-item>
+          <el-menu-item index="/agent-configs">
+            <el-icon><MagicStick /></el-icon>
+            <span>智能体配置</span>
+          </el-menu-item>
+        </el-sub-menu>
       </el-menu>
+
+      <div class="sidebar-footer">
+        <div class="user-info">
+          <el-icon><User /></el-icon>
+          <span class="user-name">{{ authStore.realName || authStore.username }}</span>
+        </div>
+        <el-button text class="logout-btn" @click="handleLogout">
+          <el-icon><SwitchButton /></el-icon>
+          <span>退出</span>
+        </el-button>
+      </div>
     </el-aside>
     <el-main class="main-content">
       <router-view />
@@ -110,10 +136,21 @@
 </template>
 
 <script setup lang="ts">
-import { useRoute } from 'vue-router'
-import { Folder, Box, User, Trophy, Document, Setting, DataAnalysis, Monitor, Checked, VideoPlay, Connection, UserFilled, Goods, House, OfficeBuilding, Avatar, Calendar, EditPen, Odometer, Money, Coin } from '@element-plus/icons-vue'
+import { useRoute, useRouter } from 'vue-router'
+import {
+  Folder, Box, User, Trophy, Document, Setting, Monitor, UserFilled,
+  Avatar, Money, Coin, Cpu, MagicStick, SwitchButton,
+} from '@element-plus/icons-vue'
+import { useAuthStore } from '@/stores/auth'
 
 const route = useRoute()
+const router = useRouter()
+const authStore = useAuthStore()
+
+function handleLogout() {
+  authStore.logout()
+  router.push('/login')
+}
 </script>
 
 <style scoped>
@@ -125,6 +162,8 @@ const route = useRoute()
   background: linear-gradient(180deg, #1a1a2e 0%, #16213e 100%);
   border-right: none;
   overflow-y: auto;
+  display: flex;
+  flex-direction: column;
 }
 
 .logo {
@@ -149,6 +188,7 @@ const route = useRoute()
 .sidebar-menu {
   border-right: none;
   background: transparent;
+  flex: 1;
   --el-menu-bg-color: transparent;
   --el-menu-text-color: #a0aec0;
   --el-menu-active-color: #fff;
@@ -158,6 +198,40 @@ const route = useRoute()
 .sidebar-menu .el-menu-item.is-active {
   background: rgba(67, 97, 238, 0.15);
   border-right: 3px solid var(--primary);
+}
+
+.sidebar-footer {
+  padding: 12px 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #a0aec0;
+  font-size: 13px;
+  min-width: 0;
+}
+
+.user-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.logout-btn {
+  color: #a0aec0;
+  font-size: 13px;
+  padding: 4px 8px;
+  flex-shrink: 0;
+}
+
+.logout-btn:hover {
+  color: #f56c6c;
 }
 
 .main-content {

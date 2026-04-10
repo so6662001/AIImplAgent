@@ -462,3 +462,45 @@ export interface ProjectPlan {
 export interface RequiredCourse {
   id: number; industryType: string; courseModule: string; kaRequired: boolean; sortOrder: number
 }
+
+export interface SysUser {
+  id: number
+  username: string
+  realName: string
+  role: string
+  phone: string
+  email: string
+}
+
+export interface LoginVO {
+  token: string
+  username: string
+  realName: string
+  role: string
+  expiresIn: number
+}
+
+export interface LlmProviderConfig {
+  id: number
+  providerName: string
+  providerType: string
+  apiEndpoint: string
+  apiKey: string
+  modelName: string
+  maxTokens: number
+  temperature: number
+  enabled: boolean
+}
+
+export interface AgentConfig {
+  id: number
+  agentCode: string
+  agentName: string
+  description: string
+  llmProviderId: number
+  fallbackLlmProviderId: number | null
+  promptTemplate: string
+  ragEnabled: boolean
+  ragCollectionName: string
+  enabled: boolean
+}
