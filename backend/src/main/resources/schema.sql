@@ -743,6 +743,23 @@ CREATE TABLE IF NOT EXISTS t_qa_message (
     create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+-- Import Progress (数据导入进度)
+CREATE TABLE IF NOT EXISTS t_import_progress (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    project_id BIGINT NOT NULL UNIQUE,
+    current_batch INT DEFAULT 1,
+    batch1_status VARCHAR(20) DEFAULT 'PENDING',
+    batch2_status VARCHAR(20) DEFAULT 'PENDING',
+    batch3_status VARCHAR(20) DEFAULT 'PENDING',
+    batch4_status VARCHAR(20) DEFAULT 'PENDING',
+    batch5_status VARCHAR(20) DEFAULT 'PENDING',
+    overall_status VARCHAR(20) DEFAULT 'NOT_STARTED',
+    last_error TEXT,
+    create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    update_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    deleted INT DEFAULT 0
+);
+
 -- Research Report (调研分析报告)
 CREATE TABLE IF NOT EXISTS t_research_report (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
