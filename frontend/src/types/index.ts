@@ -116,18 +116,40 @@ export interface CustomerProfile {
   id: number
   projectId: number
   companyName: string
+  legalPerson: string
+  registeredCapital: string
+  establishmentDate: string
+  address: string
   industryType: string
   businessModel: string
   tradeMode: string
   tradeScope: string
   mainBusiness: string
+  salesMode: string
   totalProductionLines: number
+  productionShifts: string
+  mesCurrentStatus: string
+  qualityStandards: string
   totalWarehouseCount: number
   totalWarehouseAreaSqm: number
   totalCraneCount: number
+  inventoryTurnoverRate: number
+  inventoryManagementMethod: string
   monthlyVolume: number
   monthlyAmount: number
+  pricingModel: string
+  settlementMethods: string
+  creditPolicy: string
+  totalCustomerCount: number
+  customerTypes: string
+  topCustomers: string
   totalStaff: number
+  departments: string
+  keyPositions: string
+  decisionChain: string
+  existingSystems: string
+  targetModules: string
+  modulePriorities: string
   managementGoals: string
   processGoals: string
   efficiencyGoals: string
