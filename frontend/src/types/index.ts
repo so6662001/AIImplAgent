@@ -570,3 +570,12 @@ export interface ScheduleSuggestion {
 export interface DispatchResult {
   recommendedPms: PmRecommendation[]; scheduleSuggestion: ScheduleSuggestion
 }
+
+export interface GeneratedPlan {
+  estimatedDurationDays: number; riskLevel: string
+  milestones: { name: string; dayOffset: number; deliverables: string }[]
+  wbsItems: { phase: string; taskName: string; startDay: number; endDay: number; responsible: string; deliverable: string }[]
+  resourcePlan: { role: string; headcount: number; phase: string; skills: string }[]
+  riskPlan: { riskName: string; riskLevel: string; impact: string; mitigation: string; isHighRisk: boolean }[]
+  ganttData: { taskName: string; phase: string; startDay: number; endDay: number; progress: number; dependencies: string }[]
+}

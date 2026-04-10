@@ -1,83 +1,96 @@
 <template>
   <div>
     <div class="page-header">
-      <h2>交付计划</h2>
-      <el-button type="primary" @click="showDialog = true">新增计划</el-button>
+      <h2>交付计划工作台</h2>
     </div>
 
-    <div class="card">
-      <div style="margin-bottom: 16px">
-        <el-input-number v-model="filterProjectId" :min="1" placeholder="项目ID" controls-position="right" style="width: 180px" />
-        <el-button type="primary" @click="loadData" style="margin-left: 8px">查询</el-button>
-      </div>
-      <el-table :data="list" stripe>
-        <el-table-column prop="planName" label="计划名称" min-width="180" />
-        <el-table-column prop="totalDays" label="总天数" width="90" />
-        <el-table-column label="状态" width="100">
-          <template #default="{ row }">
-            <el-tag
-              :type="row.status === 'COMPLETED' ? 'success' : row.status === 'IN_PROGRESS' ? '' : 'info'"
-              size="small"
-            >
-              {{ row.status }}
-            </el-tag>
-          </template>
-        </el-table-column>
-        <el-table-column prop="milestones" label="里程碑" min-width="200" show-overflow-tooltip />
-        <el-table-column prop="wbsItems" label="WBS" min-width="160" show-overflow-tooltip />
-        <el-table-column prop="resources" label="资源" width="140" show-overflow-tooltip />
-        <el-table-column prop="risks" label="风险" width="140" show-overflow-tooltip />
-      </el-table>
-    </div>
+    <el-tabs v-model="activeTab" type="border-card">
+      <!-- Tab 1: 自动生成计划 -->
+      <el-tab-pane label="自动生成计划" name="generate">
+        <div class="card" style="margin-bottom: 20px">
+          <el-form :model="genForm" label-width="140px" :rules="genRules" ref="genFormRef">
+            <el-row :gutter="16">
+              <el-col :span="8">
+                <el-form-item label="项目ID" prop="projectId">
+                  <el-input-number v-model="genForm.projectId" :min="1" controls-position="right" style="width: 100%" />
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
+                <el-form-item label="定制级别" prop="customizationLevel">
+                  <el-select v-model="genForm.customizationLevel" style="width: 100%">
+                    <el-option label="标准" value="标准" />
+                    <el-option label="轻度定制" value="轻度定制" />
+                    <el-option label="深度定制" value="深度定制" />
+                  </el-select>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
+                <el-form-item label="截止日期">
+                  <el-date-picker v-model="genForm.deadline" type="date" value-format="YYYY-MM-DD" placeholder="选择日期" style="width: 100%" />
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <el-row :gutter="16">
+              <el-col :span="8">
+                <el-form-item label="预算">
+                  <el-input v-model="genForm.budget" placeholder="如: 50万" />
+                </el-form-item>
+              </el-col>
+              <el-col :span="16">
+                <el-form-item label="集成需求">
+                  <el-select v-model="genForm.integrationRequirements" multiple placeholder="选择集成需求" style="width: 100%">
+                    <el-option v-for="item in integrationOptions" :key="item" :label="item" :value="item" />
+                  </el-select>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <el-form-item>
+              <el-button type="primary" :loading="generating" @click="handleGenerate">生成交付计划</el-button>
+            </el-form-item>
+          </el-form>
+        </div>
 
-    <el-dialog v-model="showDialog" title="新增交付计划" width="700px" destroy-on-close>
-      <el-form ref="formRef" :model="form" :rules="rules" label-width="120px">
-        <el-row :gutter="16">
-          <el-col :span="12">
-            <el-form-item label="项目ID" prop="projectId">
-              <el-input-number v-model="form.projectId" :min="1" controls-position="right" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="计划名称" prop="planName">
-              <el-input v-model="form.planName" maxlength="120" />
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row :gutter="16">
-          <el-col :span="12">
-            <el-form-item label="总天数" prop="totalDays">
-              <el-input-number v-model="form.totalDays" :min="1" controls-position="right" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="状态">
-              <el-select v-model="form.status" placeholder="请选择">
-                <el-option label="待启动" value="PENDING" />
-                <el-option label="进行中" value="IN_PROGRESS" />
-                <el-option label="已完成" value="COMPLETED" />
-              </el-select>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-form-item label="里程碑">
-          <el-input v-model="form.milestones" type="textarea" :rows="3" placeholder="JSON格式" />
-        </el-form-item>
-        <el-form-item label="WBS">
-          <el-input v-model="form.wbsItems" type="textarea" :rows="3" placeholder="JSON格式" />
-        </el-form-item>
-        <el-form-item label="资源">
-          <el-input v-model="form.resources" type="textarea" :rows="2" placeholder="JSON格式" />
-        </el-form-item>
-        <el-form-item label="风险">
-          <el-input v-model="form.risks" type="textarea" :rows="2" placeholder="JSON格式" />
-        </el-form-item>
-      </el-form>
-      <template #footer>
-        <el-button @click="showDialog = false">取消</el-button>
-        <el-button type="primary" :loading="submitting" @click="handleSubmit">确定</el-button>
-      </template>
-    </el-dialog>
+        <PlanDetailView v-if="generatedPlan" :plan="generatedPlan" />
+      </el-tab-pane>
+
+      <!-- Tab 2: 已有计划 -->
+      <el-tab-pane label="已有计划" name="existing">
+        <div class="card">
+          <div style="margin-bottom: 16px">
+            <el-input-number v-model="filterProjectId" :min="1" placeholder="项目ID" controls-position="right" style="width: 180px" />
+            <el-button type="primary" @click="loadExistingPlans" style="margin-left: 8px">查询</el-button>
+          </div>
+          <el-table :data="existingList" stripe highlight-current-row @row-click="handleRowClick" style="cursor: pointer">
+            <el-table-column prop="id" label="ID" width="70" />
+            <el-table-column prop="planName" label="计划名称" min-width="180" />
+            <el-table-column prop="totalDays" label="总天数" width="90" />
+            <el-table-column label="自动生成" width="100">
+              <template #default="{ row }">
+                <el-tag v-if="row.autoGenerated" type="success" size="small">AI生成</el-tag>
+                <el-tag v-else type="info" size="small">手动</el-tag>
+              </template>
+            </el-table-column>
+            <el-table-column label="风险等级" width="100">
+              <template #default="{ row }">
+                <el-tag v-if="row.riskLevel" :type="riskTagType(row.riskLevel)" size="small">{{ row.riskLevel }}</el-tag>
+              </template>
+            </el-table-column>
+            <el-table-column label="状态" width="100">
+              <template #default="{ row }">
+                <el-tag :type="row.status === 'COMPLETED' ? 'success' : row.status === 'IN_PROGRESS' ? '' : 'info'" size="small">
+                  {{ row.status }}
+                </el-tag>
+              </template>
+            </el-table-column>
+          </el-table>
+        </div>
+
+        <div v-if="selectedPlanDetail" style="margin-top: 20px">
+          <el-divider content-position="left">计划详情</el-divider>
+          <PlanDetailView :plan="selectedPlanDetail" />
+        </div>
+      </el-tab-pane>
+    </el-tabs>
   </div>
 </template>
 
@@ -85,62 +98,83 @@
 import { ref, onMounted } from 'vue'
 import type { FormInstance } from 'element-plus'
 import { ElMessage } from 'element-plus'
-import { createProjectPlan, listProjectPlans } from '@/api/projectplan'
-import type { ProjectPlan } from '@/types'
+import { listProjectPlans, generatePlan, getPlanDetail } from '@/api/projectplan'
+import type { GeneratedPlan } from '@/types'
 import { required } from '@/utils/validators'
+import PlanDetailView from './PlanDetailView.vue'
 
-const list = ref<ProjectPlan[]>([])
-const showDialog = ref(false)
-const submitting = ref(false)
-const formRef = ref<FormInstance>()
-const filterProjectId = ref<number>(1)
+const activeTab = ref('generate')
 
-const form = ref({
+const integrationOptions = ['ERP对接', '银行接口', 'WMS对接', 'MES对接', '电商平台', '税控系统']
+
+const genFormRef = ref<FormInstance>()
+const generating = ref(false)
+const generatedPlan = ref<GeneratedPlan | null>(null)
+
+const genForm = ref({
   projectId: 1,
-  planName: '',
-  totalDays: 30,
-  milestones: '',
-  wbsItems: '',
-  resources: '',
-  risks: '',
-  status: 'PENDING',
+  customizationLevel: '标准',
+  deadline: '',
+  budget: '',
+  integrationRequirements: [] as string[],
 })
 
-const rules = {
+const genRules = {
   projectId: [required('项目ID不能为空')],
-  planName: [required('计划名称不能为空')],
-  totalDays: [{
-    validator: (_rule: unknown, value: number, callback: (err?: Error) => void) => {
-      if (!value || value < 1) {
-        callback(new Error('总天数必须大于0'))
-        return
-      }
-      callback()
-    },
-    trigger: 'blur',
-  }],
+  customizationLevel: [required('定制级别不能为空')],
 }
 
-async function loadData() {
-  if (!filterProjectId.value) return
-  const res = await listProjectPlans(filterProjectId.value)
-  list.value = res.data.data
-}
-
-async function handleSubmit() {
-  const valid = await formRef.value?.validate().catch(() => false)
+async function handleGenerate() {
+  const valid = await genFormRef.value?.validate().catch(() => false)
   if (!valid) return
 
-  submitting.value = true
+  generating.value = true
   try {
-    await createProjectPlan(form.value as unknown as Record<string, unknown>)
-    ElMessage.success('交付计划创建成功')
-    showDialog.value = false
-    await loadData()
+    const payload: Record<string, unknown> = {
+      projectId: genForm.value.projectId,
+      customizationLevel: genForm.value.customizationLevel,
+      integrationRequirements: genForm.value.integrationRequirements,
+    }
+    if (genForm.value.deadline) payload.deadline = genForm.value.deadline
+    if (genForm.value.budget) payload.budget = genForm.value.budget
+
+    const res = await generatePlan(payload)
+    generatedPlan.value = res.data.data
+    ElMessage.success('交付计划生成成功')
+  } catch {
+    ElMessage.error('生成计划失败')
   } finally {
-    submitting.value = false
+    generating.value = false
   }
 }
 
-onMounted(loadData)
+const filterProjectId = ref<number>(1)
+const existingList = ref<any[]>([])
+const selectedPlanDetail = ref<GeneratedPlan | null>(null)
+
+async function loadExistingPlans() {
+  if (!filterProjectId.value) return
+  const res = await listProjectPlans(filterProjectId.value)
+  existingList.value = res.data.data
+  selectedPlanDetail.value = null
+}
+
+async function handleRowClick(row: any) {
+  try {
+    const res = await getPlanDetail(row.id)
+    selectedPlanDetail.value = res.data.data
+  } catch {
+    ElMessage.error('加载计划详情失败')
+  }
+}
+
+function riskTagType(level: string) {
+  if (level === 'HIGH') return 'danger'
+  if (level === 'MEDIUM') return 'warning'
+  return 'success'
+}
+
+onMounted(() => {
+  loadExistingPlans()
+})
 </script>
