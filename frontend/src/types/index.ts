@@ -376,3 +376,89 @@ export interface TrainingDashboard {
   documentCompletionRate: number
   goLiveReady: boolean
 }
+
+export interface Department {
+  id: number; deptCode: string; deptName: string; parentId: number | null
+  managerId: number | null; sortOrder: number; enabled: boolean
+}
+
+export interface EmployeeRecord {
+  id: number; employeeCode: string; name: string; gender: string
+  idCard: string; phone: string; email: string; deptId: number
+  position: string; joinDate: string; enabled: boolean
+}
+
+export interface BankAccount {
+  id: number; accountCode: string; accountName: string; accountType: string
+  bankName: string; bankAccountNo: string; bankBranch: string
+  currency: string; subjectCode: string; enabled: boolean
+}
+
+export interface StorageLocation {
+  id: number; locationCode: string; locationName: string; warehouseId: number
+  locationType: string; enabled: boolean
+}
+
+export interface AccountSubject {
+  id: number; subjectCode: string; subjectName: string; parentCode: string
+  subjectCategory: string; balanceDirection: string; auxiliaryAccounting: string
+  isLeaf: boolean; enabled: boolean
+}
+
+export interface InventoryBalance {
+  id: number; projectId: number; productId: number; warehouseId: number
+  locationId: number | null; batchNo: string; inboundDate: string
+  quantity: number; weight: number; packQuantity: number; costUnitPrice: number
+  wholeUnits: number; oddUnits: number; costAmount: number; unitWeight: number
+}
+
+export interface CustomerBalance {
+  id: number; projectId: number; customerId: number; docType: string; docNo: string
+  docDate: string; receivableAmount: number; receivedAmount: number
+  balance: number; balanceType: string; expectedDate: string; remark: string
+}
+
+export interface SupplierBalance {
+  id: number; projectId: number; supplierId: number; balance: number; balanceType: string
+  docType: string; docNo: string; docDate: string; remark: string
+}
+
+export interface AccountBalance {
+  id: number; projectId: number; bankAccountId: number; currency: string
+  openingBalance: number; remark: string
+}
+
+export interface SubjectBalance {
+  id: number; projectId: number; subjectCode: string; subjectName: string
+  debitBalance: number; creditBalance: number
+}
+
+export interface TrialBalance {
+  projectId: number; totalDebit: number; totalCredit: number; balanced: boolean
+}
+
+export interface OtherReceivable {
+  id: number; projectId: number; subjectCode: string; objectType: string
+  objectId: number; objectName: string; summary: string; amount: number; occurDate: string
+}
+
+export interface OtherPayable {
+  id: number; projectId: number; subjectCode: string; objectType: string
+  objectId: number; objectName: string; summary: string; amount: number; occurDate: string
+}
+
+export interface InvoiceBalance {
+  id: number; projectId: number; invoiceType: string; counterpartyId: number
+  counterpartyName: string; docNo: string; productId: number; productName: string
+  spec: string; material: string; quantity: number; unitPrice: number
+  amount: number; taxRate: number; taxAmount: number; totalAmount: number; docDate: string
+}
+
+export interface ProjectPlan {
+  id: number; projectId: number; planName: string; totalDays: number
+  milestones: string; wbsItems: string; resources: string; risks: string; status: string
+}
+
+export interface RequiredCourse {
+  id: number; industryType: string; courseModule: string; kaRequired: boolean; sortOrder: number
+}

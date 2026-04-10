@@ -14,81 +14,92 @@
           <el-icon><Folder /></el-icon>
           <span>项目管理</span>
         </el-menu-item>
-        <el-menu-item index="/products">
-          <el-icon><Box /></el-icon>
-          <span>货品档案</span>
-        </el-menu-item>
-        <el-menu-item index="/customers">
-          <el-icon><User /></el-icon>
-          <span>客户档案</span>
-        </el-menu-item>
-        <el-menu-item index="/suppliers">
-          <el-icon><Goods /></el-icon>
-          <span>供应商档案</span>
-        </el-menu-item>
-        <el-menu-item index="/warehouses">
-          <el-icon><House /></el-icon>
-          <span>仓库档案</span>
-        </el-menu-item>
-        <el-menu-item index="/categories">
-          <el-icon><OfficeBuilding /></el-icon>
-          <span>品类档案</span>
-        </el-menu-item>
-        <el-menu-item index="/related-units">
-          <el-icon><Connection /></el-icon>
-          <span>往来单位</span>
-        </el-menu-item>
-        <el-menu-item index="/training">
-          <el-icon><Trophy /></el-icon>
-          <span>培训考核</span>
-        </el-menu-item>
-        <el-menu-item index="/trainees">
-          <el-icon><Avatar /></el-icon>
-          <span>学员管理</span>
-        </el-menu-item>
-        <el-menu-item index="/training-logs">
-          <el-icon><Calendar /></el-icon>
-          <span>培训日志</span>
-        </el-menu-item>
-        <el-menu-item index="/training-dashboard">
-          <el-icon><Odometer /></el-icon>
-          <span>培训仪表盘</span>
-        </el-menu-item>
-        <el-menu-item index="/research">
-          <el-icon><DataAnalysis /></el-icon>
-          <span>调研分析</span>
-        </el-menu-item>
-        <el-menu-item index="/account-sets">
-          <el-icon><Setting /></el-icon>
-          <span>帐套管理</span>
-        </el-menu-item>
-        <el-menu-item index="/engineers">
-          <el-icon><UserFilled /></el-icon>
-          <span>工程师管理</span>
-        </el-menu-item>
-        <el-menu-item index="/project-evals">
-          <el-icon><Document /></el-icon>
-          <span>项目评价</span>
-        </el-menu-item>
-        <el-menu-item index="/worklogs">
-          <el-icon><EditPen /></el-icon>
-          <span>工作日志</span>
-        </el-menu-item>
+
+        <el-sub-menu index="org">
+          <template #title>
+            <el-icon><Avatar /></el-icon>
+            <span>组织架构</span>
+          </template>
+          <el-menu-item index="/departments">部门管理</el-menu-item>
+          <el-menu-item index="/employees">员工管理</el-menu-item>
+        </el-sub-menu>
+
+        <el-sub-menu index="finance">
+          <template #title>
+            <el-icon><Money /></el-icon>
+            <span>财务基础</span>
+          </template>
+          <el-menu-item index="/bank-accounts">银行账号</el-menu-item>
+          <el-menu-item index="/account-subjects">财务科目</el-menu-item>
+        </el-sub-menu>
+
+        <el-sub-menu index="archive">
+          <template #title>
+            <el-icon><Box /></el-icon>
+            <span>档案管理</span>
+          </template>
+          <el-menu-item index="/products">货品档案</el-menu-item>
+          <el-menu-item index="/customers">客户档案</el-menu-item>
+          <el-menu-item index="/suppliers">供应商档案</el-menu-item>
+          <el-menu-item index="/warehouses">仓库档案</el-menu-item>
+          <el-menu-item index="/categories">品类档案</el-menu-item>
+          <el-menu-item index="/related-units">往来单位</el-menu-item>
+          <el-menu-item index="/storage-locations">库位管理</el-menu-item>
+        </el-sub-menu>
+
+        <el-sub-menu index="opening">
+          <template #title>
+            <el-icon><Coin /></el-icon>
+            <span>期初数据</span>
+          </template>
+          <el-menu-item index="/inventory-balances">库存期初</el-menu-item>
+          <el-menu-item index="/customer-balances">客户往来</el-menu-item>
+          <el-menu-item index="/supplier-balances">供应商往来</el-menu-item>
+          <el-menu-item index="/account-balances">账户余额</el-menu-item>
+          <el-menu-item index="/subject-balances">科目余额</el-menu-item>
+          <el-menu-item index="/other-receivables">其他应收</el-menu-item>
+          <el-menu-item index="/other-payables">其他应付</el-menu-item>
+          <el-menu-item index="/invoice-balances">发票期初</el-menu-item>
+        </el-sub-menu>
+
+        <el-sub-menu index="training">
+          <template #title>
+            <el-icon><Trophy /></el-icon>
+            <span>培训管理</span>
+          </template>
+          <el-menu-item index="/training">培训考核</el-menu-item>
+          <el-menu-item index="/trainees">学员管理</el-menu-item>
+          <el-menu-item index="/training-logs">培训日志</el-menu-item>
+          <el-menu-item index="/training-dashboard">培训仪表盘</el-menu-item>
+          <el-menu-item index="/required-courses">KA必学课程</el-menu-item>
+        </el-sub-menu>
+
+        <el-sub-menu index="delivery">
+          <template #title>
+            <el-icon><Document /></el-icon>
+            <span>项目交付</span>
+          </template>
+          <el-menu-item index="/research">调研分析</el-menu-item>
+          <el-menu-item index="/account-sets">帐套管理</el-menu-item>
+          <el-menu-item index="/project-plans">交付计划</el-menu-item>
+          <el-menu-item index="/project-evals">项目评价</el-menu-item>
+          <el-menu-item index="/go-live-checks">上线检查</el-menu-item>
+          <el-menu-item index="/simulations">模拟演练</el-menu-item>
+          <el-menu-item index="/reports">交付报告</el-menu-item>
+        </el-sub-menu>
+
+        <el-sub-menu index="workforce">
+          <template #title>
+            <el-icon><UserFilled /></el-icon>
+            <span>团队管理</span>
+          </template>
+          <el-menu-item index="/engineers">工程师管理</el-menu-item>
+          <el-menu-item index="/worklogs">工作日志</el-menu-item>
+        </el-sub-menu>
+
         <el-menu-item index="/servers">
           <el-icon><Monitor /></el-icon>
           <span>服务器管理</span>
-        </el-menu-item>
-        <el-menu-item index="/go-live-checks">
-          <el-icon><Checked /></el-icon>
-          <span>上线检查</span>
-        </el-menu-item>
-        <el-menu-item index="/simulations">
-          <el-icon><VideoPlay /></el-icon>
-          <span>模拟演练</span>
-        </el-menu-item>
-        <el-menu-item index="/reports">
-          <el-icon><Connection /></el-icon>
-          <span>交付报告</span>
         </el-menu-item>
       </el-menu>
     </el-aside>
@@ -100,7 +111,7 @@
 
 <script setup lang="ts">
 import { useRoute } from 'vue-router'
-import { Folder, Box, User, Trophy, Document, Setting, DataAnalysis, Monitor, Checked, VideoPlay, Connection, UserFilled, Goods, House, OfficeBuilding, Avatar, Calendar, EditPen, Odometer } from '@element-plus/icons-vue'
+import { Folder, Box, User, Trophy, Document, Setting, DataAnalysis, Monitor, Checked, VideoPlay, Connection, UserFilled, Goods, House, OfficeBuilding, Avatar, Calendar, EditPen, Odometer, Money, Coin } from '@element-plus/icons-vue'
 
 const route = useRoute()
 </script>
