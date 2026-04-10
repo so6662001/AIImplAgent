@@ -29,6 +29,12 @@ const router = createRouter({
       redirect: '/projects',
       children: [
         {
+          path: 'dispatch',
+          name: 'Dispatch',
+          component: () => import('@/views/dispatch/DispatchPage.vue'),
+          meta: { title: '项目调度' },
+        },
+        {
           path: 'projects',
           name: 'Projects',
           component: () => import('@/views/project/ProjectList.vue'),

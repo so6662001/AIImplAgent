@@ -535,3 +535,16 @@ export interface QaMessage {
   helpful: boolean | null
   createTime: string
 }
+
+export interface PmRecommendation {
+  engineerId: number; engineerCode: string; name: string; level: string
+  matchScore: number; matchReasons: string[]; riskNotes: string | null
+  currentStatus: string; currentProjectCount: number; compositeScore: number
+}
+export interface MilestoneVO { name: string; dayOffset: number; deliverables: string }
+export interface ScheduleSuggestion {
+  recommendedStart: string; estimatedDurationDays: number; milestones: MilestoneVO[]
+}
+export interface DispatchResult {
+  recommendedPms: PmRecommendation[]; scheduleSuggestion: ScheduleSuggestion
+}

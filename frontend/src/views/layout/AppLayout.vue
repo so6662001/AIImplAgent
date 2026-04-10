@@ -10,6 +10,11 @@
         router
         class="sidebar-menu"
       >
+        <el-menu-item index="/dispatch">
+          <el-icon><Guide /></el-icon>
+          <span>项目调度</span>
+        </el-menu-item>
+
         <el-menu-item index="/projects">
           <el-icon><Folder /></el-icon>
           <span>项目管理</span>
@@ -143,7 +148,7 @@
 import { useRoute, useRouter } from 'vue-router'
 import {
   Folder, Box, User, Trophy, Document, Setting, Monitor, UserFilled,
-  Avatar, Money, Coin, Cpu, MagicStick, SwitchButton, ChatDotSquare,
+  Avatar, Money, Coin, Cpu, MagicStick, SwitchButton, ChatDotSquare, Guide,
 } from '@element-plus/icons-vue'
 import { useAuthStore } from '@/stores/auth'
 
