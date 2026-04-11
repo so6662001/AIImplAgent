@@ -1,0 +1,164 @@
+:root {
+  --primary: #4361ee;
+  --bg: #f5f7fa;
+  --card: #ffffff;
+  --text: #1d1d1f;
+  --text-secondary: #6e6e73;
+  --border: #e5e7eb;
+  --radius: 12px;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body, #app {
+  height: 100%;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC',
+    'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+  color: var(--text);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+}
+
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.page-header h2 {
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: -0.3px;
+}
+
+.card {
+  background: var(--card);
+  border-radius: var(--radius);
+  padding: 24px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.el-table {
+  --el-table-border-color: var(--border);
+  --el-table-header-bg-color: #fafbfc;
+}
+
+.el-button--primary {
+  --el-button-bg-color: var(--primary);
+  --el-button-border-color: var(--primary);
+}
+
+/* ===== H5 Mobile Responsive ===== */
+
+/* Tables: horizontal scroll wrapper */
+.table-responsive {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* All el-table inside cards: add scroll */
+.card .el-table {
+  width: 100%;
+}
+
+@media (max-width: 768px) {
+  /* Page header: stack title and actions */
+  .page-header {
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .page-header h2 {
+    font-size: 17px;
+    width: 100%;
+  }
+
+  /* Card padding reduced */
+  .card {
+    padding: 16px;
+    border-radius: 8px;
+  }
+
+  /* Dialog responsive: near full width on mobile */
+  .el-dialog {
+    --el-dialog-width: 92vw !important;
+    width: 92vw !important;
+    max-width: 92vw !important;
+    margin: 5vh auto !important;
+  }
+  .el-dialog__body {
+    padding: 16px !important;
+    max-height: 65vh;
+    overflow-y: auto;
+  }
+
+  /* Form label on top for mobile */
+  .el-form--label-left .el-form-item__label,
+  .el-form .el-form-item__label {
+    float: none !important;
+    display: block !important;
+    text-align: left !important;
+    padding: 0 0 4px 0 !important;
+    width: auto !important;
+  }
+  .el-form-item__content {
+    margin-left: 0 !important;
+  }
+
+  /* el-col: force full width on mobile for common patterns */
+  .el-col-8, .el-col-6, .el-col-4, .el-col-12 {
+    max-width: 100% !important;
+    flex: 0 0 100% !important;
+  }
+
+  /* Summary cards: 2 per row on mobile */
+  .summary-cards .el-col {
+    max-width: 50% !important;
+    flex: 0 0 50% !important;
+    margin-bottom: 8px;
+  }
+
+  /* Table font size */
+  .el-table {
+    font-size: 13px;
+  }
+  .el-table .cell {
+    padding: 4px 8px !important;
+  }
+
+  /* Button group wrap */
+  .header-actions, .el-button-group {
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  /* Tabs: scroll on small screens */
+  .el-tabs__nav-wrap {
+    overflow-x: auto !important;
+  }
+
+  /* Steps: vertical on mobile */
+  .el-steps--horizontal {
+    flex-direction: column !important;
+  }
+  .el-steps--horizontal .el-step {
+    flex-direction: row !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .summary-cards .el-col {
+    max-width: 100% !important;
+    flex: 0 0 100% !important;
+  }
+
+  .el-dialog {
+    --el-dialog-width: 96vw !important;
+    width: 96vw !important;
+    margin: 2vh auto !important;
+  }
+}

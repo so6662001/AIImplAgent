@@ -1,0 +1,10 @@
+spring:
+  profiles:
+    active: test
+  sql:
+    init:
+      data-locations: classpath:no-data.sql
+
+jwt:
+  secret: test-jwt-secret-key-for-unit-testing-only-2026-not-for-production
+  expiration: 86400000
