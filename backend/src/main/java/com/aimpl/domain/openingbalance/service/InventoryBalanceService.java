@@ -1,6 +1,8 @@
 package com.aimpl.domain.openingbalance.service;
 
 import com.aimpl.common.exception.BizException;
+import com.aimpl.domain.accountset.entity.AccountSet;
+import com.aimpl.domain.accountset.mapper.AccountSetMapper;
 import com.aimpl.domain.archive.mapper.ProductMapper;
 import com.aimpl.domain.archive.mapper.StorageLocationMapper;
 import com.aimpl.domain.archive.mapper.WarehouseMapper;
@@ -26,6 +28,7 @@ public class InventoryBalanceService extends ServiceImpl<InventoryBalanceMapper,
     private final ProductMapper productMapper;
     private final WarehouseMapper warehouseMapper;
     private final StorageLocationMapper storageLocationMapper;
+    private final AccountSetMapper accountSetMapper;
 
     @Transactional
     public InventoryBalance create(InventoryBalanceCreateDTO dto) {
@@ -42,6 +45,16 @@ public class InventoryBalanceService extends ServiceImpl<InventoryBalanceMapper,
             throw new BizException("库位不存在: " + dto.getLocationId());
         }
 
+        AccountSet accountSet = accountSetMapper.selectOne(
+                new LambdaQueryWrapper<AccountSet>()
+                        .eq(AccountSet::getProjectId, dto.getProjectId())
+                        .last("LIMIT 1"));
+
+        int amtScale = accountSet != null ? accountSet.getAmtDecimals() : 2;
+        int wgtScale = accountSet != null ? accountSet.getWgtDecimals() : 3;
+        int qtyScale = accountSet != null ? accountSet.getQtyDecimals() : 0;
+        boolean useWeight = accountSet != null ? accountSet.getUseWeight() : true;
+
         InventoryBalance b = new InventoryBalance();
         b.setProjectId(dto.getProjectId());
         b.setProductId(dto.getProductId());
@@ -57,21 +70,27 @@ public class InventoryBalanceService extends ServiceImpl<InventoryBalanceMapper,
         if (dto.getPackQuantity() != null && dto.getPackQuantity().compareTo(BigDecimal.ZERO) > 0) {
             BigDecimal wholeUnits = dto.getQuantity().divideToIntegralValue(dto.getPackQuantity());
             b.setWholeUnits(wholeUnits);
-            b.setOddUnits(dto.getQuantity().subtract(wholeUnits.multiply(dto.getPackQuantity())));
+            b.setOddUnits(dto.getQuantity().subtract(wholeUnits.multiply(dto.getPackQuantity()))
+                    .setScale(qtyScale, RoundingMode.HALF_UP));
         } else {
             b.setWholeUnits(BigDecimal.ZERO);
             b.setOddUnits(dto.getQuantity());
         }
 
-        if (dto.getWeight() != null && dto.getCostUnitPrice() != null) {
-            b.setCostAmount(dto.getWeight().multiply(dto.getCostUnitPrice())
-                    .setScale(2, RoundingMode.HALF_UP));
+        BigDecimal effectiveWeight = dto.getWeight();
+        if (!useWeight) {
+            effectiveWeight = dto.getQuantity();
         }
 
-        if (dto.getQuantity() != null && dto.getQuantity().compareTo(BigDecimal.ZERO) > 0
+        if (effectiveWeight != null && dto.getCostUnitPrice() != null) {
+            b.setCostAmount(effectiveWeight.multiply(dto.getCostUnitPrice())
+                    .setScale(amtScale, RoundingMode.HALF_UP));
+        }
+
+        if (useWeight && dto.getQuantity() != null && dto.getQuantity().compareTo(BigDecimal.ZERO) > 0
                 && dto.getWeight() != null) {
             b.setUnitWeight(dto.getWeight().multiply(new BigDecimal("1000"))
-                    .divide(dto.getQuantity(), 3, RoundingMode.HALF_UP));
+                    .divide(dto.getQuantity(), wgtScale, RoundingMode.HALF_UP));
         } else {
             b.setUnitWeight(null);
         }
