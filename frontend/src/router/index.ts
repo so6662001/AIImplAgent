@@ -274,6 +274,12 @@ const router = createRouter({
           component: () => import('@/views/assist/SupportTicketList.vue'),
           meta: { title: '现场辅助' },
         },
+        {
+          path: 'after-sales',
+          name: 'AfterSales',
+          component: () => import('@/views/aftersales/AfterSalesPage.vue'),
+          meta: { title: '售后服务' },
+        },
       ],
     },
   ],

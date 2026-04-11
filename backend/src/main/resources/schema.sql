@@ -842,7 +842,7 @@ CREATE TABLE IF NOT EXISTS t_customer_health (
     project_id BIGINT NOT NULL,
     customer_name VARCHAR(100),
     check_date DATE,
-    ticket_count_30d INT DEFAULT 0,
+    ticket_count30d INT DEFAULT 0,
     ticket_trend VARCHAR(10),
     open_ticket_count INT DEFAULT 0,
     avg_resolution_hours DECIMAL(10,2),
