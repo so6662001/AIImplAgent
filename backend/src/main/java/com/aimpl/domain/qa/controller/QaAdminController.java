@@ -25,7 +25,7 @@ public class QaAdminController {
 
     @GetMapping("/{sessionId}/messages")
     public R<List<QaMessageVO>> listMessages(@PathVariable Long sessionId) {
-        return R.ok(qaService.getSessionMessages(sessionId));
+        return R.ok(qaService.getSessionMessages(sessionId, null));
     }
 
     @PostMapping("/{sessionId}/reply")

@@ -39,7 +39,7 @@ public class KnowledgeController {
     }
 
     @PutMapping("/{id}")
-    public R<KnowledgeEntry> update(@PathVariable Long id, @RequestBody KnowledgeEntryCreateDTO dto) {
+    public R<KnowledgeEntry> update(@PathVariable Long id, @Valid @RequestBody KnowledgeEntryCreateDTO dto) {
         return R.ok(knowledgeService.update(id, dto));
     }
 

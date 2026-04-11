@@ -32,13 +32,16 @@ public class QaController {
     }
 
     @GetMapping("/sessions/{sessionId}/messages")
-    public R<List<QaMessageVO>> listMessages(@PathVariable Long sessionId) {
-        return R.ok(qaService.getSessionMessages(sessionId));
+    public R<List<QaMessageVO>> listMessages(@PathVariable Long sessionId, HttpServletRequest request) {
+        Long clientUserId = (Long) request.getAttribute("clientUserId");
+        return R.ok(qaService.getSessionMessages(sessionId, clientUserId));
     }
 
     @PostMapping("/messages/{messageId}/rate")
-    public R<Void> rateMessage(@PathVariable Long messageId, @RequestParam Boolean helpful) {
-        qaService.rateMessage(messageId, helpful);
+    public R<Void> rateMessage(@PathVariable Long messageId, @RequestParam Boolean helpful,
+                               HttpServletRequest request) {
+        Long clientUserId = (Long) request.getAttribute("clientUserId");
+        qaService.rateMessage(messageId, helpful, clientUserId);
         return R.ok();
     }
 }

@@ -714,6 +714,7 @@ CREATE TABLE IF NOT EXISTS t_client_user (
     role VARCHAR(30),
     department VARCHAR(30),
     access_token VARCHAR(64) NOT NULL UNIQUE,
+    token_expires_at TIMESTAMP,
     enabled BOOLEAN DEFAULT TRUE,
     last_active_time TIMESTAMP,
     create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

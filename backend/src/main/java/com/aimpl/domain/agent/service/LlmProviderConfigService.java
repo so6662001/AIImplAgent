@@ -6,6 +6,7 @@ import com.aimpl.domain.agent.entity.LlmProviderConfig;
 import com.aimpl.domain.agent.mapper.LlmProviderConfigMapper;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -30,7 +31,11 @@ public class LlmProviderConfigService extends ServiceImpl<LlmProviderConfigMappe
         config.setMaxTokens(dto.getMaxTokens());
         config.setTemperature(dto.getTemperature());
         config.setEnabled(true);
-        save(config);
+        try {
+            save(config);
+        } catch (DataIntegrityViolationException e) {
+            throw new BizException("供应商名称已存在: " + dto.getProviderName());
+        }
         return maskApiKey(config);
     }
 
@@ -73,9 +78,13 @@ public class LlmProviderConfigService extends ServiceImpl<LlmProviderConfigMappe
     }
 
     private LlmProviderConfig maskApiKey(LlmProviderConfig config) {
-        if (config.getApiKey() != null && config.getApiKey().length() > 4) {
-            String masked = "****" + config.getApiKey().substring(config.getApiKey().length() - 4);
-            config.setApiKey(masked);
+        if (config.getApiKey() != null) {
+            if (config.getApiKey().length() <= 4) {
+                config.setApiKey("****");
+            } else {
+                String masked = "****" + config.getApiKey().substring(config.getApiKey().length() - 4);
+                config.setApiKey(masked);
+            }
         }
         return config;
     }

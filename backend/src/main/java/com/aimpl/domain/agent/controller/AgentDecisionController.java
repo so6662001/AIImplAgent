@@ -1,14 +1,15 @@
 package com.aimpl.domain.agent.controller;
 
 import com.aimpl.common.result.R;
+import com.aimpl.domain.agent.dto.AgentDecisionLogDTO;
 import com.aimpl.domain.agent.entity.AgentDecisionLog;
 import com.aimpl.domain.agent.service.AgentDecisionLogService;
 import com.aimpl.domain.agent.vo.AgentPerformanceVO;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/agent-decisions")
@@ -18,20 +19,11 @@ public class AgentDecisionController {
     private final AgentDecisionLogService agentDecisionLogService;
 
     @PostMapping
-    public R<AgentDecisionLog> logDecision(@RequestBody Map<String, Object> body) {
-        String agentCode = (String) body.get("agentCode");
-        Long projectId = body.get("projectId") != null
-                ? Long.valueOf(body.get("projectId").toString()) : null;
-        String triggerType = (String) body.get("triggerType");
-        String inputSummary = (String) body.get("inputSummary");
-        String outputSummary = (String) body.get("outputSummary");
-        String modelUsed = (String) body.get("modelUsed");
-        int executionTimeMs = body.get("executionTimeMs") != null
-                ? Integer.parseInt(body.get("executionTimeMs").toString()) : 0;
-
+    public R<AgentDecisionLog> logDecision(@Valid @RequestBody AgentDecisionLogDTO dto) {
         return R.ok(agentDecisionLogService.logDecision(
-                agentCode, projectId, triggerType,
-                inputSummary, outputSummary, modelUsed, executionTimeMs));
+                dto.getAgentCode(), dto.getProjectId(), dto.getTriggerType(),
+                dto.getInputSummary(), dto.getOutputSummary(), dto.getModelUsed(),
+                dto.getExecutionTimeMs() != null ? dto.getExecutionTimeMs() : 0));
     }
 
     @GetMapping

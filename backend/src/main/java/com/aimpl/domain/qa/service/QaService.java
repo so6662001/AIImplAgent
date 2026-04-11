@@ -71,7 +71,8 @@ public class QaService {
         messageMapper.insert(userMsg);
 
         MockAnswer mockAnswer = generateContextAwareAnswer(
-                dto.getQuestion(), dto.getCurrentPage(), dto.getCurrentField());
+                dto.getQuestion(), dto.getCurrentPage(), dto.getCurrentField(),
+                session.getProjectId());
 
         QaMessage aiMsg = new QaMessage();
         aiMsg.setSessionId(session.getId());
@@ -87,7 +88,16 @@ public class QaService {
         return toMessageVO(aiMsg);
     }
 
-    public List<QaMessageVO> getSessionMessages(Long sessionId) {
+    public List<QaMessageVO> getSessionMessages(Long sessionId, Long clientUserId) {
+        if (clientUserId != null) {
+            QaSession session = sessionMapper.selectById(sessionId);
+            if (session == null) {
+                throw new BizException("会话不存在");
+            }
+            if (!session.getClientUserId().equals(clientUserId)) {
+                throw new BizException("无权访问该会话");
+            }
+        }
         List<QaMessage> messages = messageMapper.selectList(
                 new LambdaQueryWrapper<QaMessage>()
                         .eq(QaMessage::getSessionId, sessionId)
@@ -103,10 +113,16 @@ public class QaService {
         return sessions.stream().map(this::toSessionVO).collect(Collectors.toList());
     }
 
-    public void rateMessage(Long messageId, Boolean helpful) {
+    public void rateMessage(Long messageId, Boolean helpful, Long clientUserId) {
         QaMessage msg = messageMapper.selectById(messageId);
         if (msg == null) {
             throw new BizException("消息不存在");
+        }
+        if (clientUserId != null) {
+            QaSession session = sessionMapper.selectById(msg.getSessionId());
+            if (session == null || !session.getClientUserId().equals(clientUserId)) {
+                throw new BizException("无权操作该消息");
+            }
         }
         msg.setHelpful(helpful);
         messageMapper.updateById(msg);
@@ -183,7 +199,8 @@ public class QaService {
         }
     }
 
-    private MockAnswer generateContextAwareAnswer(String question, String currentPage, String currentField) {
+    private MockAnswer generateContextAwareAnswer(String question, String currentPage, String currentField,
+                                                     Long projectId) {
         StringBuilder answerBuilder = new StringBuilder();
         String videoUrl = null;
         String knowledgeModule = null;
@@ -214,7 +231,7 @@ public class QaService {
                     .append("~").append(formatTime(top.getEndSecond())).append("）\n\n");
         }
 
-        List<KnowledgeEntry> knowledgeResults = knowledgeService.search(question, null, null);
+        List<KnowledgeEntry> knowledgeResults = knowledgeService.search(question, null, projectId);
         if (!knowledgeResults.isEmpty()) {
             KnowledgeEntry topEntry = knowledgeResults.get(0);
             answerBuilder.append("【知识库】").append(topEntry.getTitle())

@@ -10,6 +10,7 @@ import com.aimpl.domain.qa.mapper.ClientUserMapper;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -39,10 +40,18 @@ public class ClientAuthService extends ServiceImpl<ClientUserMapper, ClientUser>
             user.setProjectId(project.getId());
             user.setEmployeeName(dto.getEmployeeName());
             user.setAccessToken(UUID.randomUUID().toString().replace("-", ""));
+            user.setTokenExpiresAt(LocalDateTime.now().plusHours(24));
             user.setEnabled(true);
-            save(user);
+            try {
+                save(user);
+            } catch (DataIntegrityViolationException e) {
+                throw new BizException("客户端用户已存在");
+            }
         } else if (Boolean.FALSE.equals(user.getEnabled())) {
             throw new BizException("该账户已被禁用");
+        } else {
+            user.setAccessToken(UUID.randomUUID().toString().replace("-", ""));
+            user.setTokenExpiresAt(LocalDateTime.now().plusHours(24));
         }
 
         user.setLastActiveTime(LocalDateTime.now());
@@ -61,9 +70,14 @@ public class ClientAuthService extends ServiceImpl<ClientUserMapper, ClientUser>
         if (accessToken == null || accessToken.isBlank()) {
             return null;
         }
-        return getOne(new LambdaQueryWrapper<ClientUser>()
+        ClientUser user = getOne(new LambdaQueryWrapper<ClientUser>()
                 .eq(ClientUser::getAccessToken, accessToken)
                 .eq(ClientUser::getEnabled, true));
+        if (user != null && user.getTokenExpiresAt() != null
+                && user.getTokenExpiresAt().isBefore(LocalDateTime.now())) {
+            return null;
+        }
+        return user;
     }
 
     public void updateLastActiveTime(Long userId) {

@@ -86,9 +86,11 @@ public class KnowledgeService extends ServiceImpl<KnowledgeEntryMapper, Knowledg
         }
         if (projectId != null) {
             wrapper.and(w -> w
-                    .ne(KnowledgeEntry::getAccessLevel, "PROJECT_ONLY")
+                    .ne(KnowledgeEntry::getCategory, "PROJECT_PRIVATE")
                     .or()
                     .eq(KnowledgeEntry::getProjectId, projectId));
+        } else {
+            wrapper.ne(KnowledgeEntry::getCategory, "PROJECT_PRIVATE");
         }
         if (query != null && !query.isBlank()) {
             wrapper.and(w -> w
@@ -115,11 +117,11 @@ public class KnowledgeService extends ServiceImpl<KnowledgeEntryMapper, Knowledg
 
         if (projectId == null) {
             allEnabled = allEnabled.stream()
-                    .filter(e -> !"PROJECT_ONLY".equals(e.getAccessLevel()))
+                    .filter(e -> !"PROJECT_PRIVATE".equals(e.getCategory()))
                     .collect(Collectors.toList());
         } else {
             allEnabled = allEnabled.stream()
-                    .filter(e -> !"PROJECT_ONLY".equals(e.getAccessLevel())
+                    .filter(e -> !"PROJECT_PRIVATE".equals(e.getCategory())
                             || projectId.equals(e.getProjectId()))
                     .collect(Collectors.toList());
         }
@@ -189,7 +191,8 @@ public class KnowledgeService extends ServiceImpl<KnowledgeEntryMapper, Knowledg
 
     public KnowledgeStatsVO getStats() {
         List<KnowledgeEntry> all = list(new LambdaQueryWrapper<KnowledgeEntry>()
-                .eq(KnowledgeEntry::getEnabled, true));
+                .eq(KnowledgeEntry::getEnabled, true)
+                .ne(KnowledgeEntry::getCategory, "PROJECT_PRIVATE"));
 
         KnowledgeStatsVO stats = new KnowledgeStatsVO();
         stats.setTotalEntries(all.size());

@@ -22,6 +22,8 @@ public class ClientUser {
 
     private String accessToken;
 
+    private LocalDateTime tokenExpiresAt;
+
     private Boolean enabled;
 
     private LocalDateTime lastActiveTime;

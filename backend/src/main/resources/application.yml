@@ -18,8 +18,9 @@ spring:
     time-zone: Asia/Shanghai
     default-property-inclusion: non_null
 
+# IMPORTANT: jwt.secret MUST be overridden in production with a secure random value
 jwt:
-  secret: ai-impl-agent-jwt-secret-key-2026-steel-industry
+  secret: ai-impl-agent-jwt-secret-key-2026-steel-industry-default-change-me-in-production
   expiration: 86400000
 
 mybatis-plus:

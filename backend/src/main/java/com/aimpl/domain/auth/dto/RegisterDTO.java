@@ -18,9 +18,6 @@ public class RegisterDTO {
     @Size(max = 30, message = "真实姓名长度不能超过30")
     private String realName;
 
-    @NotBlank(message = "角色不能为空")
-    private String role;
-
     @Pattern(regexp = "^1[3-9]\\d{9}$", message = "手机号格式不正确")
     private String phone;
 

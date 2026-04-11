@@ -9,6 +9,7 @@ import com.aimpl.domain.auth.mapper.SysUserMapper;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -62,11 +63,15 @@ public class AuthService extends ServiceImpl<SysUserMapper, SysUser> {
         user.setUsername(dto.getUsername());
         user.setPassword(PASSWORD_ENCODER.encode(dto.getPassword()));
         user.setRealName(dto.getRealName());
-        user.setRole(dto.getRole());
+        user.setRole("VIEWER");
         user.setPhone(dto.getPhone());
         user.setEmail(dto.getEmail());
         user.setEnabled(true);
-        save(user);
+        try {
+            save(user);
+        } catch (DataIntegrityViolationException e) {
+            throw new BizException("用户名已存在: " + dto.getUsername());
+        }
         return user;
     }
 
