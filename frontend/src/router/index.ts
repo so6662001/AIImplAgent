@@ -280,6 +280,12 @@ const router = createRouter({
           component: () => import('@/views/aftersales/AfterSalesPage.vue'),
           meta: { title: '售后服务' },
         },
+        {
+          path: 'smart-input',
+          name: 'SmartInput',
+          component: () => import('@/views/inputassist/SmartInputPage.vue'),
+          meta: { title: '智能录入' },
+        },
       ],
     },
   ],
