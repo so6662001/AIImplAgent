@@ -287,6 +287,12 @@ const router = createRouter({
           meta: { title: '问答管理' },
         },
         {
+          path: 'video-approval',
+          name: 'VideoApproval',
+          component: () => import('@/views/training/VideoApproval.vue'),
+          meta: { title: '视频审批' },
+        },
+        {
           path: 'data-import',
           name: 'DataImport',
           component: () => import('@/views/dataimport/DataImportDashboard.vue'),

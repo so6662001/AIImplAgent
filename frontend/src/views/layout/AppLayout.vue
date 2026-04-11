@@ -97,6 +97,10 @@
             <el-icon><ChatDotSquare /></el-icon>
             <span>问答管理</span>
           </el-menu-item>
+          <el-menu-item index="/video-approval">
+            <el-icon><Check /></el-icon>
+            <span>视频审批</span>
+          </el-menu-item>
         </el-sub-menu>
 
         <el-sub-menu index="delivery">
@@ -291,6 +295,10 @@
               <el-icon><ChatDotSquare /></el-icon>
               <span>问答管理</span>
             </el-menu-item>
+            <el-menu-item index="/video-approval">
+              <el-icon><Check /></el-icon>
+              <span>视频审批</span>
+            </el-menu-item>
           </el-sub-menu>
 
           <el-sub-menu index="delivery">
@@ -404,7 +412,7 @@ import { useRoute, useRouter } from 'vue-router'
 import {
   Folder, Box, User, Trophy, Document, Setting, Monitor, UserFilled,
   Avatar, Money, Coin, Cpu, MagicStick, SwitchButton, ChatDotSquare, Guide, DataLine, Headset, Service, Edit, TrendCharts, Collection, Files, PieChart,
-  Expand, Notebook,
+  Expand, Notebook, Check,
 } from '@element-plus/icons-vue'
 import { useAuthStore } from '@/stores/auth'
 

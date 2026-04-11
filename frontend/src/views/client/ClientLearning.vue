@@ -36,6 +36,20 @@
       >
         <span class="tab-icon">📝</span> 我的考试
       </button>
+      <button
+        class="tab-btn"
+        :class="{ active: currentTab === 'videos' }"
+        @click="switchTab('videos')"
+      >
+        <span class="tab-icon">🎬</span> 视频教材
+      </button>
+      <button
+        class="tab-btn"
+        :class="{ active: currentTab === 'points' }"
+        @click="switchTab('points')"
+      >
+        <span class="tab-icon">🪙</span> 我的积分
+      </button>
     </div>
 
     <!-- Main content -->
@@ -315,6 +329,168 @@
           <el-empty v-if="examResults.length === 0 && !loadingResults" description="暂无考试记录" />
         </div>
       </div>
+
+      <!-- ========== 视频教材 tab ========== -->
+      <div v-if="currentTab === 'videos'">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px">
+          <h3 class="section-title">社区视频教材</h3>
+          <el-button type="primary" @click="publishDialogVisible = true">发布教材</el-button>
+        </div>
+
+        <div v-if="loadingVideos" class="loading-area">
+          <el-icon class="is-loading" :size="24"><Loading /></el-icon>
+          <span>加载中...</span>
+        </div>
+
+        <el-row v-else :gutter="20">
+          <el-col
+            v-for="video in approvedVideos"
+            :key="video.id"
+            :xs="24" :sm="12" :md="8" :lg="6"
+            style="margin-bottom: 20px"
+          >
+            <div class="course-card">
+              <div class="course-card-top" style="display: flex; gap: 6px; flex-wrap: wrap">
+                <el-tag size="small" type="primary" effect="plain">{{ video.categoryModule }}</el-tag>
+                <el-tag size="small" :type="video.pointsCost > 0 ? 'warning' : 'success'" effect="plain">
+                  {{ video.pointsCost > 0 ? `${video.pointsCost} 积分` : '免费' }}
+                </el-tag>
+              </div>
+              <h4 class="course-card-name">{{ video.title }}</h4>
+              <p class="course-card-desc">{{ video.publisherName }}</p>
+              <div class="course-card-meta">
+                <span>{{ formatVideoDuration(video.videoDuration) }}</span>
+                <span>{{ video.totalLearners ?? 0 }} 人学习</span>
+                <span>{{ video.totalViews ?? 0 }} 次浏览</span>
+              </div>
+              <div style="margin-top: 12px">
+                <template v-if="isLearningVideo(video.id)">
+                  <el-progress
+                    :percentage="getLearningProgress(video.id)"
+                    :stroke-width="6"
+                    :color="progressColor"
+                  />
+                  <span style="font-size: 12px; color: #8e8e93">学习中</span>
+                </template>
+                <el-button
+                  v-else
+                  type="primary"
+                  size="small"
+                  :loading="startingVideoId === video.id"
+                  @click="handleStartLearning(video)"
+                >
+                  开始学习
+                </el-button>
+              </div>
+            </div>
+          </el-col>
+          <el-col :span="24" v-if="approvedVideos.length === 0 && !loadingVideos">
+            <el-empty description="暂无视频教材" />
+          </el-col>
+        </el-row>
+
+        <!-- Publish Dialog -->
+        <el-dialog v-model="publishDialogVisible" title="发布视频教材" width="520px" destroy-on-close>
+          <el-form :model="publishForm" label-width="100px">
+            <el-form-item label="标题" required>
+              <el-input v-model="publishForm.title" placeholder="请输入视频标题" maxlength="100" />
+            </el-form-item>
+            <el-form-item label="描述">
+              <el-input v-model="publishForm.description" type="textarea" :rows="3" placeholder="请输入视频描述" />
+            </el-form-item>
+            <el-form-item label="分类模块" required>
+              <el-select v-model="publishForm.categoryModule" placeholder="请选择分类" style="width: 100%">
+                <el-option label="采购管理" value="采购管理" />
+                <el-option label="销售管理" value="销售管理" />
+                <el-option label="库存管理" value="库存管理" />
+                <el-option label="使用技巧" value="使用技巧" />
+                <el-option label="行业知识" value="行业知识" />
+                <el-option label="其他" value="其他" />
+              </el-select>
+            </el-form-item>
+            <el-form-item label="视频地址" required>
+              <el-input v-model="publishForm.videoUrl" placeholder="请输入视频URL" />
+            </el-form-item>
+            <el-form-item label="视频时长" required>
+              <el-input-number v-model="publishForm.videoDuration" :min="1" :max="36000" placeholder="秒" style="width: 100%" />
+            </el-form-item>
+            <el-form-item label="积分费用">
+              <el-input-number v-model="publishForm.pointsCost" :min="0" :max="100" style="width: 100%" />
+              <div style="font-size: 12px; color: #8e8e93; margin-top: 4px">0 = 免费</div>
+            </el-form-item>
+          </el-form>
+          <template #footer>
+            <el-button @click="publishDialogVisible = false">取消</el-button>
+            <el-button type="primary" :loading="publishing" @click="handlePublishVideo">发布</el-button>
+          </template>
+        </el-dialog>
+      </div>
+
+      <!-- ========== 我的积分 tab ========== -->
+      <div v-if="currentTab === 'points'">
+        <div v-if="loadingPoints" class="loading-area">
+          <el-icon class="is-loading" :size="24"><Loading /></el-icon>
+          <span>加载中...</span>
+        </div>
+
+        <div v-else>
+          <!-- Balance card -->
+          <div class="points-balance-card">
+            <div class="points-balance-value">{{ pointsBalance }}</div>
+            <div class="points-balance-label">积分</div>
+          </div>
+
+          <!-- My published videos -->
+          <h3 class="section-title" style="margin: 24px 0 12px">我发布的教材</h3>
+          <div v-if="myPublishedVideos.length === 0">
+            <el-empty description="暂无发布的教材" :image-size="60" />
+          </div>
+          <div v-else>
+            <div v-for="vid in myPublishedVideos" :key="vid.id" class="result-card" style="margin-bottom: 12px">
+              <div style="display: flex; justify-content: space-between; align-items: center">
+                <div>
+                  <h4 style="margin: 0 0 6px; font-size: 15px; font-weight: 600; color: #1d1d1f">{{ vid.title }}</h4>
+                  <div style="display: flex; gap: 8px; align-items: center">
+                    <el-tag size="small" :type="approvalStatusType(vid.approvalStatus)">
+                      {{ approvalStatusLabel(vid.approvalStatus) }}
+                    </el-tag>
+                    <span style="font-size: 13px; color: #8e8e93">{{ vid.categoryModule }}</span>
+                  </div>
+                </div>
+                <div style="text-align: right">
+                  <div style="font-size: 18px; font-weight: 700; color: #67c23a">+{{ vid.publisherEarnedPoints ?? 0 }}</div>
+                  <div style="font-size: 12px; color: #8e8e93">获得积分</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Transaction history -->
+          <h3 class="section-title" style="margin: 24px 0 12px">积分明细</h3>
+          <el-table v-if="pointsHistory.length > 0" :data="pointsHistory" stripe style="width: 100%">
+            <el-table-column label="时间" prop="createTime" width="180">
+              <template #default="{ row }">{{ formatDate(row.createTime) }}</template>
+            </el-table-column>
+            <el-table-column label="类型" width="120">
+              <template #default="{ row }">
+                <el-tag size="small" :type="txTypeTagType(row.transactionType)">
+                  {{ txTypeLabel(row.transactionType) }}
+                </el-tag>
+              </template>
+            </el-table-column>
+            <el-table-column label="数量" width="100">
+              <template #default="{ row }">
+                <span :style="{ color: row.amount > 0 ? '#67c23a' : '#f56c6c', fontWeight: 600 }">
+                  {{ row.amount > 0 ? '+' : '' }}{{ row.amount }}
+                </span>
+              </template>
+            </el-table-column>
+            <el-table-column label="余额" prop="balanceAfter" width="100" />
+            <el-table-column label="说明" prop="description" />
+          </el-table>
+          <el-empty v-else description="暂无积分记录" :image-size="60" />
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -322,16 +498,18 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import { ElMessage } from 'element-plus'
+import { ElMessage, ElMessageBox } from 'element-plus'
 import { Loading } from '@element-plus/icons-vue'
 import { useClientAuthStore } from '@/stores/clientAuth'
 import { getCoursesWithProgress, getCourseWithProgress, updateLearningProgress, getLearningSummary } from '@/api/clientlearning'
 import { getMyPapers, getMyResults } from '@/api/clientexam'
+import { publishVideo, listApprovedVideos, listMyPublished, startLearning, listMyLearning, getPointsBalance, getPointsHistory } from '@/api/clientvideo'
 
 const router = useRouter()
 const clientAuth = useClientAuthStore()
 
-const currentTab = ref<'learning' | 'exam'>('learning')
+type TabKey = 'learning' | 'exam' | 'videos' | 'points'
+const currentTab = ref<TabKey>('learning')
 const loadingCourses = ref(false)
 const loadingPapers = ref(false)
 const loadingResults = ref(false)
@@ -346,6 +524,26 @@ const selectedChapter = ref<any>(null)
 const availablePapers = ref<any[]>([])
 const examResults = ref<any[]>([])
 
+const loadingVideos = ref(false)
+const approvedVideos = ref<any[]>([])
+const myLearningVideos = ref<any[]>([])
+const startingVideoId = ref<number | null>(null)
+const publishDialogVisible = ref(false)
+const publishing = ref(false)
+const publishForm = ref({
+  title: '',
+  description: '',
+  categoryModule: '',
+  videoUrl: '',
+  videoDuration: 60,
+  pointsCost: 0,
+})
+
+const loadingPoints = ref(false)
+const pointsBalance = ref(0)
+const myPublishedVideos = ref<any[]>([])
+const pointsHistory = ref<any[]>([])
+
 const progressColor = [
   { color: '#f56c6c', percentage: 30 },
   { color: '#e6a23c', percentage: 60 },
@@ -356,10 +554,14 @@ onMounted(() => {
   loadLearningData()
 })
 
-function switchTab(tab: 'learning' | 'exam') {
+function switchTab(tab: TabKey) {
   currentTab.value = tab
   if (tab === 'exam') {
     loadExamData()
+  } else if (tab === 'videos') {
+    loadVideoData()
+  } else if (tab === 'points') {
+    loadPointsData()
   }
 }
 
@@ -490,6 +692,126 @@ function paperStatusLabel(s: string): string {
   if (s === 'CREATED') return '待考试'
   if (s === 'SUBMITTED') return '已提交'
   return s
+}
+
+async function loadVideoData() {
+  loadingVideos.value = true
+  try {
+    const [videosRes, learningRes] = await Promise.all([
+      listApprovedVideos(),
+      listMyLearning(),
+    ])
+    approvedVideos.value = videosRes.data.data || []
+    myLearningVideos.value = learningRes.data.data || []
+  } catch { /* handled by interceptor */ }
+  finally { loadingVideos.value = false }
+}
+
+function isLearningVideo(videoId: number): boolean {
+  return myLearningVideos.value.some((l: any) => l.videoId === videoId)
+}
+
+function getLearningProgress(videoId: number): number {
+  const learning = myLearningVideos.value.find((l: any) => l.videoId === videoId)
+  if (!learning) return 0
+  if (learning.completed) return 100
+  const video = approvedVideos.value.find((v: any) => v.id === videoId)
+  if (!video || !video.videoDuration) return 0
+  return Math.min(100, Math.round((learning.watchedDuration / video.videoDuration) * 100))
+}
+
+async function handleStartLearning(video: any) {
+  if (video.pointsCost > 0) {
+    try {
+      await ElMessageBox.confirm(
+        `将消费 ${video.pointsCost} 积分，确定？`,
+        '积分消费确认',
+        { confirmButtonText: '确定', cancelButtonText: '取消', type: 'warning' },
+      )
+    } catch {
+      return
+    }
+  }
+  startingVideoId.value = video.id
+  try {
+    await startLearning(video.id)
+    ElMessage.success('开始学习')
+    await loadVideoData()
+  } catch { /* handled by interceptor */ }
+  finally { startingVideoId.value = null }
+}
+
+async function handlePublishVideo() {
+  if (!publishForm.value.title?.trim()) {
+    ElMessage.warning('请输入视频标题')
+    return
+  }
+  if (!publishForm.value.categoryModule) {
+    ElMessage.warning('请选择分类模块')
+    return
+  }
+  if (!publishForm.value.videoUrl?.trim()) {
+    ElMessage.warning('请输入视频地址')
+    return
+  }
+  publishing.value = true
+  try {
+    await publishVideo({
+      title: publishForm.value.title,
+      description: publishForm.value.description,
+      categoryModule: publishForm.value.categoryModule,
+      videoUrl: publishForm.value.videoUrl,
+      videoDuration: publishForm.value.videoDuration,
+      pointsCost: publishForm.value.pointsCost,
+    })
+    ElMessage.success('发布成功，等待审批')
+    publishDialogVisible.value = false
+    publishForm.value = { title: '', description: '', categoryModule: '', videoUrl: '', videoDuration: 60, pointsCost: 0 }
+  } catch { /* handled by interceptor */ }
+  finally { publishing.value = false }
+}
+
+async function loadPointsData() {
+  loadingPoints.value = true
+  try {
+    const [balanceRes, publishedRes, historyRes] = await Promise.all([
+      getPointsBalance(),
+      listMyPublished(),
+      getPointsHistory(),
+    ])
+    pointsBalance.value = balanceRes.data.data ?? 0
+    myPublishedVideos.value = publishedRes.data.data || []
+    pointsHistory.value = historyRes.data.data || []
+  } catch { /* handled by interceptor */ }
+  finally { loadingPoints.value = false }
+}
+
+function approvalStatusType(status: string): 'warning' | 'success' | 'danger' | 'info' {
+  if (status === 'PENDING') return 'warning'
+  if (status === 'APPROVED') return 'success'
+  if (status === 'REJECTED') return 'danger'
+  return 'info'
+}
+
+function approvalStatusLabel(status: string): string {
+  if (status === 'PENDING') return '审核中'
+  if (status === 'APPROVED') return '已通过'
+  if (status === 'REJECTED') return '已驳回'
+  return status
+}
+
+function txTypeTagType(type: string): 'success' | 'danger' | '' {
+  if (type === 'EARN_FROM_VIDEO') return 'success'
+  if (type === 'SPEND_ON_VIDEO') return 'danger'
+  return ''
+}
+
+function txTypeLabel(type: string): string {
+  if (type === 'EARN_FROM_VIDEO') return '获得'
+  if (type === 'SPEND_ON_VIDEO') return '消费'
+  if (type === 'SYSTEM_REWARD') return '奖励'
+  if (type === 'ADMIN_ADJUST') return '调整'
+  return type
 }
 
 function handleLogout() {
@@ -1070,6 +1392,28 @@ function handleLogout() {
 .wrong-your .label,
 .wrong-correct .label {
   font-weight: 500;
+}
+
+/* ---- Points balance card ---- */
+.points-balance-card {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 16px;
+  padding: 32px;
+  text-align: center;
+  color: #fff;
+  box-shadow: 0 4px 20px rgba(102, 126, 234, 0.25);
+}
+
+.points-balance-value {
+  font-size: 48px;
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.points-balance-label {
+  font-size: 16px;
+  opacity: 0.85;
+  margin-top: 4px;
 }
 
 /* ---- Responsive ---- */
