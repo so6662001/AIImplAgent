@@ -116,6 +116,11 @@
           <span>服务器管理</span>
         </el-menu-item>
 
+        <el-menu-item index="/support-tickets">
+          <el-icon><Headset /></el-icon>
+          <span>现场辅助</span>
+        </el-menu-item>
+
         <el-sub-menu index="sys-config">
           <template #title>
             <el-icon><Setting /></el-icon>
@@ -153,7 +158,7 @@
 import { useRoute, useRouter } from 'vue-router'
 import {
   Folder, Box, User, Trophy, Document, Setting, Monitor, UserFilled,
-  Avatar, Money, Coin, Cpu, MagicStick, SwitchButton, ChatDotSquare, Guide, DataLine,
+  Avatar, Money, Coin, Cpu, MagicStick, SwitchButton, ChatDotSquare, Guide, DataLine, Headset,
 } from '@element-plus/icons-vue'
 import { useAuthStore } from '@/stores/auth'
 

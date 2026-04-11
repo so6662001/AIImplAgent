@@ -268,6 +268,12 @@ const router = createRouter({
           component: () => import('@/views/dataimport/DataImportDashboard.vue'),
           meta: { title: '数据治理' },
         },
+        {
+          path: 'support-tickets',
+          name: 'SupportTickets',
+          component: () => import('@/views/assist/SupportTicketList.vue'),
+          meta: { title: '现场辅助' },
+        },
       ],
     },
   ],
