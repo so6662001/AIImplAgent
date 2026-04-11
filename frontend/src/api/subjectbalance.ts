@@ -10,5 +10,5 @@ export function listSubjectBalances(projectId: number) {
 }
 
 export function getTrialBalance(projectId: number) {
-  return request.get<R<TrialBalance>>('/subject-balances/trial-balance', { params: { projectId } })
+  return request.get<R<TrialBalance>>(`/subject-balances/trial-balance/${projectId}`)
 }
