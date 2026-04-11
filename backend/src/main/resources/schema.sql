@@ -853,3 +853,65 @@ CREATE TABLE IF NOT EXISTS t_customer_health (
     create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     deleted INT DEFAULT 0
 );
+
+-- Video Resource (视频资源库)
+CREATE TABLE IF NOT EXISTS t_video_resource (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    module VARCHAR(30) NOT NULL,
+    function_name VARCHAR(60) NOT NULL,
+    title VARCHAR(100) NOT NULL,
+    description TEXT,
+    video_url VARCHAR(500) NOT NULL,
+    duration INT,
+    sort_order INT DEFAULT 0,
+    enabled BOOLEAN DEFAULT TRUE,
+    create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    update_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    deleted INT DEFAULT 0
+);
+
+-- Video Clip (视频片段)
+CREATE TABLE IF NOT EXISTS t_video_clip (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    video_id BIGINT NOT NULL,
+    clip_title VARCHAR(100) NOT NULL,
+    start_second INT DEFAULT 0,
+    end_second INT DEFAULT 0,
+    related_page VARCHAR(60),
+    related_field VARCHAR(60),
+    operation_step TEXT,
+    subtitle_text TEXT,
+    sort_order INT DEFAULT 0,
+    create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    deleted INT DEFAULT 0
+);
+
+-- Input Assist Log (录入辅助日志)
+CREATE TABLE IF NOT EXISTS t_input_assist_log (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    user_id BIGINT,
+    page VARCHAR(60) NOT NULL,
+    field VARCHAR(60),
+    trigger_type VARCHAR(30),
+    question TEXT,
+    answer TEXT,
+    video_clip_id BIGINT,
+    video_played BOOLEAN DEFAULT FALSE,
+    resolved BOOLEAN DEFAULT FALSE,
+    create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Field Help Content (字段帮助内容)
+CREATE TABLE IF NOT EXISTS t_field_help_content (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    page VARCHAR(60) NOT NULL,
+    field_name VARCHAR(60) NOT NULL,
+    help_text TEXT NOT NULL,
+    format_example VARCHAR(200),
+    common_errors TEXT,
+    related_video_clip_id BIGINT,
+    sort_order INT DEFAULT 0,
+    enabled BOOLEAN DEFAULT TRUE,
+    create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    deleted INT DEFAULT 0
+);

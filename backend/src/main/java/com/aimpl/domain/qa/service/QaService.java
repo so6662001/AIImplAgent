@@ -1,6 +1,8 @@
 package com.aimpl.domain.qa.service;
 
 import com.aimpl.common.exception.BizException;
+import com.aimpl.domain.fieldhelp.entity.FieldHelpContent;
+import com.aimpl.domain.fieldhelp.service.FieldHelpService;
 import com.aimpl.domain.qa.dto.QaAskDTO;
 import com.aimpl.domain.qa.dto.QaMessageVO;
 import com.aimpl.domain.qa.dto.QaReplyDTO;
@@ -10,6 +12,8 @@ import com.aimpl.domain.qa.entity.QaMessage;
 import com.aimpl.domain.qa.entity.QaSession;
 import com.aimpl.domain.qa.mapper.QaMessageMapper;
 import com.aimpl.domain.qa.mapper.QaSessionMapper;
+import com.aimpl.domain.videolibrary.service.VideoLibraryService;
+import com.aimpl.domain.videolibrary.vo.VideoClipMatchVO;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -25,6 +29,8 @@ public class QaService {
     private final QaSessionMapper sessionMapper;
     private final QaMessageMapper messageMapper;
     private final ClientAuthService clientAuthService;
+    private final FieldHelpService fieldHelpService;
+    private final VideoLibraryService videoLibraryService;
 
     @Transactional
     public QaMessageVO ask(Long clientUserId, QaAskDTO dto) {
@@ -61,13 +67,15 @@ public class QaService {
         userMsg.setContent(dto.getQuestion());
         messageMapper.insert(userMsg);
 
-        MockAnswer mockAnswer = generateMockAnswer(dto.getQuestion(), dto.getCurrentPage(), dto.getCurrentField());
+        MockAnswer mockAnswer = generateContextAwareAnswer(
+                dto.getQuestion(), dto.getCurrentPage(), dto.getCurrentField());
 
         QaMessage aiMsg = new QaMessage();
         aiMsg.setSessionId(session.getId());
         aiMsg.setRole("ASSISTANT");
         aiMsg.setContent(mockAnswer.content);
         aiMsg.setRelatedModule(mockAnswer.relatedModule);
+        aiMsg.setRelatedVideoUrl(mockAnswer.relatedVideoUrl);
         messageMapper.insert(aiMsg);
 
         session.setMessageCount(session.getMessageCount() + 2);
@@ -158,11 +166,60 @@ public class QaService {
     private static class MockAnswer {
         String content;
         String relatedModule;
+        String relatedVideoUrl;
 
         MockAnswer(String content, String relatedModule) {
             this.content = content;
             this.relatedModule = relatedModule;
         }
+
+        MockAnswer(String content, String relatedModule, String relatedVideoUrl) {
+            this.content = content;
+            this.relatedModule = relatedModule;
+            this.relatedVideoUrl = relatedVideoUrl;
+        }
+    }
+
+    private MockAnswer generateContextAwareAnswer(String question, String currentPage, String currentField) {
+        StringBuilder answerBuilder = new StringBuilder();
+        String videoUrl = null;
+
+        if (currentPage != null && !currentPage.isBlank()
+                && currentField != null && !currentField.isBlank()) {
+            FieldHelpContent help = fieldHelpService.getHelp(currentPage, currentField);
+            if (help != null) {
+                answerBuilder.append("【字段帮助】").append(help.getHelpText());
+                if (help.getFormatExample() != null && !help.getFormatExample().isBlank()) {
+                    answerBuilder.append("  格式示例: ").append(help.getFormatExample());
+                }
+                if (help.getCommonErrors() != null && !help.getCommonErrors().isBlank()) {
+                    answerBuilder.append("  常见错误: ").append(help.getCommonErrors());
+                }
+                answerBuilder.append("\n\n");
+            }
+        }
+
+        List<VideoClipMatchVO> clips = videoLibraryService.matchClips(
+                currentPage, currentField, question);
+        if (!clips.isEmpty()) {
+            VideoClipMatchVO top = clips.get(0);
+            videoUrl = top.getVideoUrl() + "#t=" + top.getStartSecond();
+            answerBuilder.append("【相关视频】").append(top.getVideoTitle())
+                    .append(" - ").append(top.getClipTitle())
+                    .append("（").append(formatTime(top.getStartSecond()))
+                    .append("~").append(formatTime(top.getEndSecond())).append("）\n\n");
+        }
+
+        MockAnswer fallback = generateMockAnswer(question, currentPage, currentField);
+        answerBuilder.append(fallback.content);
+
+        return new MockAnswer(answerBuilder.toString(),
+                fallback.relatedModule, videoUrl);
+    }
+
+    private String formatTime(Integer seconds) {
+        if (seconds == null) return "0:00";
+        return (seconds / 60) + ":" + String.format("%02d", seconds % 60);
     }
 
     private MockAnswer generateMockAnswer(String question, String currentPage, String currentField) {
