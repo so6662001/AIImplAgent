@@ -16,3 +16,11 @@ export function listAccountSets(projectId: number) {
 export function activateAccountSet(id: number) {
   return request.put<R<AccountSet>>(`/account-sets/${id}/activate`)
 }
+
+export function getRecommendation(projectId: number) {
+  return request.get<R<any>>(`/account-sets/recommend/${projectId}`)
+}
+
+export function createFromRecommendation(projectId: number) {
+  return request.post<R<any>>(`/account-sets/create-from-recommendation/${projectId}`)
+}

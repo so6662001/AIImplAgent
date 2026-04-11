@@ -6,6 +6,55 @@
     </div>
 
     <div class="card" style="margin-bottom: 20px;">
+      <h3 style="margin-top: 0;">智能推荐</h3>
+      <el-form inline>
+        <el-form-item label="项目ID">
+          <el-input-number v-model="recommendProjectId" :min="1" controls-position="right" />
+        </el-form-item>
+        <el-form-item>
+          <el-button type="success" :loading="recommendLoading" @click="handleGetRecommendation">获取推荐配置</el-button>
+        </el-form-item>
+      </el-form>
+
+      <el-card v-if="recommendation" shadow="hover" style="margin-top: 12px;">
+        <template #header>
+          <div style="display: flex; align-items: center; justify-content: space-between;">
+            <span>推荐配置</span>
+            <el-tag
+              :type="recommendation.confidence === 'HIGH' ? 'success' : 'warning'"
+              size="small"
+            >
+              置信度: {{ recommendation.confidence }}
+            </el-tag>
+          </div>
+        </template>
+        <el-descriptions :column="2" border size="small">
+          <el-descriptions-item label="帐套名称">{{ recommendation.recommendedSetName }}</el-descriptions-item>
+          <el-descriptions-item label="会计制度">{{ recommendation.recommendedAccountingSystem }}</el-descriptions-item>
+          <el-descriptions-item label="计价方式">{{ recommendation.recommendedPricingMethod }}</el-descriptions-item>
+          <el-descriptions-item label="使用重量">
+            <el-tag :type="recommendation.recommendedUseWeight ? 'success' : 'info'" size="small">
+              {{ recommendation.recommendedUseWeight ? '是' : '否' }}
+            </el-tag>
+          </el-descriptions-item>
+          <el-descriptions-item label="数量小数位">{{ recommendation.qtyDecimals }}</el-descriptions-item>
+          <el-descriptions-item label="重量小数位">{{ recommendation.wgtDecimals }}</el-descriptions-item>
+          <el-descriptions-item label="单价小数位">{{ recommendation.prcDecimals }}</el-descriptions-item>
+          <el-descriptions-item label="金额小数位">{{ recommendation.amtDecimals }}</el-descriptions-item>
+        </el-descriptions>
+        <div v-if="recommendation.recommendations && recommendation.recommendations.length" style="margin-top: 12px;">
+          <strong>建议:</strong>
+          <ul style="margin: 4px 0 0 0; padding-left: 20px;">
+            <li v-for="(item, idx) in recommendation.recommendations" :key="idx">{{ item }}</li>
+          </ul>
+        </div>
+        <div style="margin-top: 16px; text-align: right;">
+          <el-button type="primary" :loading="createFromRecLoading" @click="handleCreateFromRecommendation">一键创建帐套</el-button>
+        </div>
+      </el-card>
+    </div>
+
+    <div class="card" style="margin-bottom: 20px;">
       <el-form inline>
         <el-form-item label="项目ID">
           <el-input-number v-model="filterProjectId" :min="1" controls-position="right" />
@@ -107,7 +156,7 @@
 import { ref } from 'vue'
 import type { FormInstance } from 'element-plus'
 import { ElMessage } from 'element-plus'
-import { createAccountSet, listAccountSets, activateAccountSet } from '@/api/accountset'
+import { createAccountSet, listAccountSets, activateAccountSet, getRecommendation, createFromRecommendation } from '@/api/accountset'
 import type { AccountSet } from '@/types'
 import { required, maxLen } from '@/utils/validators'
 
@@ -116,6 +165,11 @@ const showDialog = ref(false)
 const submitting = ref(false)
 const formRef = ref<FormInstance>()
 const filterProjectId = ref(1)
+
+const recommendProjectId = ref(1)
+const recommendLoading = ref(false)
+const createFromRecLoading = ref(false)
+const recommendation = ref<any>(null)
 
 const initForm = () => ({
   projectId: undefined as number | undefined,
@@ -164,6 +218,31 @@ async function handleSubmit() {
     await loadData()
   } finally {
     submitting.value = false
+  }
+}
+
+async function handleGetRecommendation() {
+  recommendLoading.value = true
+  try {
+    const res = await getRecommendation(recommendProjectId.value)
+    recommendation.value = res.data.data
+  } catch {
+    recommendation.value = null
+  } finally {
+    recommendLoading.value = false
+  }
+}
+
+async function handleCreateFromRecommendation() {
+  createFromRecLoading.value = true
+  try {
+    await createFromRecommendation(recommendProjectId.value)
+    ElMessage.success('帐套已从推荐配置创建')
+    recommendation.value = null
+    filterProjectId.value = recommendProjectId.value
+    await loadData()
+  } finally {
+    createFromRecLoading.value = false
   }
 }
 </script>
