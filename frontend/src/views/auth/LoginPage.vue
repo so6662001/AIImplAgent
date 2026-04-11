@@ -123,7 +123,7 @@ async function handleLogin() {
 }
 
 .login-card {
-  width: 400px;
+  width: min(400px, calc(100vw - 32px));
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(20px);
   border-radius: 16px;
@@ -186,5 +186,11 @@ async function handleLogin() {
   background: linear-gradient(135deg, #3a56d4, #2f4bc0);
   transform: translateY(-1px);
   box-shadow: 0 6px 20px rgba(67, 97, 238, 0.4);
+}
+
+@media (max-width: 480px) {
+  .login-card {
+    padding: 32px 24px 28px;
+  }
 }
 </style>
