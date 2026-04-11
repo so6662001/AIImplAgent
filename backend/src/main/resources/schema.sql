@@ -915,3 +915,42 @@ CREATE TABLE IF NOT EXISTS t_field_help_content (
     create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     deleted INT DEFAULT 0
 );
+
+-- Knowledge Entry (知识库)
+CREATE TABLE IF NOT EXISTS t_knowledge_entry (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    category VARCHAR(30) NOT NULL,
+    layer VARCHAR(30) NOT NULL,
+    title VARCHAR(200) NOT NULL,
+    content TEXT NOT NULL,
+    keywords TEXT,
+    source TEXT,
+    project_id BIGINT,
+    access_level VARCHAR(20) DEFAULT 'PUBLIC',
+    view_count INT DEFAULT 0,
+    helpful_count INT DEFAULT 0,
+    enabled BOOLEAN DEFAULT TRUE,
+    created_by VARCHAR(60),
+    create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    update_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    deleted INT DEFAULT 0
+);
+
+-- Agent Decision Log (智能体决策日志)
+CREATE TABLE IF NOT EXISTS t_agent_decision_log (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    agent_code VARCHAR(30) NOT NULL,
+    project_id BIGINT,
+    user_id BIGINT,
+    trigger_type VARCHAR(20),
+    input_summary TEXT,
+    output_summary TEXT,
+    model_used TEXT,
+    knowledge_used TEXT,
+    confidence DECIMAL(5,4),
+    execution_time_ms INT,
+    human_reviewed BOOLEAN DEFAULT FALSE,
+    review_result VARCHAR(20),
+    review_comment TEXT,
+    create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);

@@ -12,6 +12,8 @@ import com.aimpl.domain.qa.entity.QaMessage;
 import com.aimpl.domain.qa.entity.QaSession;
 import com.aimpl.domain.qa.mapper.QaMessageMapper;
 import com.aimpl.domain.qa.mapper.QaSessionMapper;
+import com.aimpl.domain.knowledge.entity.KnowledgeEntry;
+import com.aimpl.domain.knowledge.service.KnowledgeService;
 import com.aimpl.domain.videolibrary.service.VideoLibraryService;
 import com.aimpl.domain.videolibrary.vo.VideoClipMatchVO;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -31,6 +33,7 @@ public class QaService {
     private final ClientAuthService clientAuthService;
     private final FieldHelpService fieldHelpService;
     private final VideoLibraryService videoLibraryService;
+    private final KnowledgeService knowledgeService;
 
     @Transactional
     public QaMessageVO ask(Long clientUserId, QaAskDTO dto) {
@@ -183,6 +186,7 @@ public class QaService {
     private MockAnswer generateContextAwareAnswer(String question, String currentPage, String currentField) {
         StringBuilder answerBuilder = new StringBuilder();
         String videoUrl = null;
+        String knowledgeModule = null;
 
         if (currentPage != null && !currentPage.isBlank()
                 && currentField != null && !currentField.isBlank()) {
@@ -210,11 +214,19 @@ public class QaService {
                     .append("~").append(formatTime(top.getEndSecond())).append("）\n\n");
         }
 
+        List<KnowledgeEntry> knowledgeResults = knowledgeService.search(question, null, null);
+        if (!knowledgeResults.isEmpty()) {
+            KnowledgeEntry topEntry = knowledgeResults.get(0);
+            answerBuilder.append("【知识库】").append(topEntry.getTitle())
+                    .append("：").append(topEntry.getContent()).append("\n\n");
+            knowledgeModule = topEntry.getLayer() != null ? topEntry.getLayer() : topEntry.getCategory();
+        }
+
         MockAnswer fallback = generateMockAnswer(question, currentPage, currentField);
         answerBuilder.append(fallback.content);
 
-        return new MockAnswer(answerBuilder.toString(),
-                fallback.relatedModule, videoUrl);
+        String relatedModule = knowledgeModule != null ? knowledgeModule : fallback.relatedModule;
+        return new MockAnswer(answerBuilder.toString(), relatedModule, videoUrl);
     }
 
     private String formatTime(Integer seconds) {
