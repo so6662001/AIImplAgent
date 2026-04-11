@@ -810,3 +810,46 @@ CREATE TABLE IF NOT EXISTS t_research_report (
     create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     deleted INT DEFAULT 0
 );
+
+-- After Sales Ticket (售后工单)
+CREATE TABLE IF NOT EXISTS t_after_sales_ticket (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    project_id BIGINT NOT NULL,
+    customer_name VARCHAR(100),
+    reporter_name VARCHAR(30),
+    reporter_contact VARCHAR(30),
+    channel VARCHAR(20),
+    intent_type VARCHAR(20),
+    title VARCHAR(100) NOT NULL,
+    description TEXT,
+    sla_priority VARCHAR(10),
+    sla_deadline TIMESTAMP,
+    status VARCHAR(20) DEFAULT 'NEW',
+    assigned_engineer_id BIGINT,
+    assigned_engineer_name VARCHAR(30),
+    resolution TEXT,
+    resolved_at TIMESTAMP,
+    knowledge_created BOOLEAN DEFAULT FALSE,
+    customer_satisfaction INT,
+    create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    update_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    deleted INT DEFAULT 0
+);
+
+-- Customer Health Record (客户健康度)
+CREATE TABLE IF NOT EXISTS t_customer_health (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    project_id BIGINT NOT NULL,
+    customer_name VARCHAR(100),
+    check_date DATE,
+    ticket_count_30d INT DEFAULT 0,
+    ticket_trend VARCHAR(10),
+    open_ticket_count INT DEFAULT 0,
+    avg_resolution_hours DECIMAL(10,2),
+    customer_satisfaction_avg DECIMAL(4,2),
+    health_score INT DEFAULT 100,
+    health_level VARCHAR(20),
+    care_actions TEXT,
+    create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    deleted INT DEFAULT 0
+);
