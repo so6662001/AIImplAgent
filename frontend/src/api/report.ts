@@ -12,3 +12,7 @@ export function listDeliveryReports(projectId: number) {
 export function confirmDeliveryReport(id: number, confirmedBy: string) {
   return request.put<R<DeliveryReport>>(`/delivery-reports/${id}/confirm`, { confirmedBy })
 }
+
+export function autoGenerateReport(projectId: number) {
+  return request.post<R<any>>(`/delivery-reports/auto-generate/${projectId}`)
+}
