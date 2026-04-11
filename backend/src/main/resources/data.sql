@@ -201,3 +201,61 @@ VALUES ('GENERAL', '操作手册', '期初数据导入指南', '期初数据导�
 -- EXPERIENCE / 经验总结
 INSERT INTO t_knowledge_entry (category, layer, title, content, keywords, source, access_level, view_count, helpful_count, enabled)
 VALUES ('EXPERIENCE', '经验总结', '常见上线问题及解决方案汇总', '上线阶段常见问题：1. 期初余额不平：检查导入数据精度和科目映射；2. 出库找不到库存：确认入库单已审核且仓库选择正确；3. 价格计算有误：检查计价方式（计重/计件）和税率设置；4. 报表数据不对：确认单据审核状态和统计期间设置；5. 打印格式异常：调整打印模板并检查纸张设置。遇到问题建议先查看系统日志，再联系技术支持。', '上线,问题,解决方案,期初,报表', '经验总结', 'PUBLIC', 0, 0, TRUE);
+
+-- ========== Course Init Data (课程初始数据) ==========
+
+-- Course 1: 系统基础操作
+INSERT INTO t_course (course_code, course_name, description, module, total_chapters, total_duration, sort_order, enabled)
+VALUES ('COURSE001', '系统基础操作', '系统基础操作培训课程，涵盖登录、导航、设置、查询、报表等基础功能', '基础操作', 5, 900, 1, TRUE);
+
+-- Course 2: 采购管理
+INSERT INTO t_course (course_code, course_name, description, module, total_chapters, total_duration, sort_order, enabled)
+VALUES ('COURSE002', '采购管理', '采购管理模块培训课程，涵盖采购单录入、入库、退货、供应商对账等操作', '采购管理', 4, 1180, 2, TRUE);
+
+-- Course 3: 销售管理
+INSERT INTO t_course (course_code, course_name, description, module, total_chapters, total_duration, sort_order, enabled)
+VALUES ('COURSE003', '销售管理', '销售管理模块培训课程，涵盖销售开单、出库、退货、客户对账与收款等操作', '销售管理', 4, 1180, 3, TRUE);
+
+-- Course 4: 库存管理
+INSERT INTO t_course (course_code, course_name, description, module, total_chapters, total_duration, sort_order, enabled)
+VALUES ('COURSE004', '库存管理', '库存管理模块培训课程，涵盖库存盘点、调拨、报表分析等操作', '库存管理', 3, 800, 4, TRUE);
+
+-- Course 1 Chapters: 系统基础操作
+INSERT INTO t_course_chapter (course_id, chapter_number, chapter_name, description, video_url, video_duration, sort_order, enabled)
+VALUES (1, 1, '系统登录与导航', '学习系统登录方式和主要导航功能', 'https://videos.example.com/course1/ch1.mp4', 180, 1, TRUE);
+INSERT INTO t_course_chapter (course_id, chapter_number, chapter_name, description, video_url, video_duration, sort_order, enabled)
+VALUES (1, 2, '个人设置与密码修改', '学习如何修改个人信息和密码', 'https://videos.example.com/course1/ch2.mp4', 120, 2, TRUE);
+INSERT INTO t_course_chapter (course_id, chapter_number, chapter_name, description, video_url, video_duration, sort_order, enabled)
+VALUES (1, 3, '基础档案查询', '学习基础档案的查询和筛选', 'https://videos.example.com/course1/ch3.mp4', 240, 3, TRUE);
+INSERT INTO t_course_chapter (course_id, chapter_number, chapter_name, description, video_url, video_duration, sort_order, enabled)
+VALUES (1, 4, '报表查看入门', '学习如何查看和导出基础报表', 'https://videos.example.com/course1/ch4.mp4', 200, 4, TRUE);
+INSERT INTO t_course_chapter (course_id, chapter_number, chapter_name, description, video_url, video_duration, sort_order, enabled)
+VALUES (1, 5, '常见问题处理', '学习常见操作问题的处理方法', 'https://videos.example.com/course1/ch5.mp4', 160, 5, TRUE);
+
+-- Course 2 Chapters: 采购管理
+INSERT INTO t_course_chapter (course_id, chapter_number, chapter_name, description, video_url, video_duration, sort_order, enabled)
+VALUES (2, 1, '采购单录入', '学习采购订单的录入流程', 'https://videos.example.com/course2/ch1.mp4', 300, 1, TRUE);
+INSERT INTO t_course_chapter (course_id, chapter_number, chapter_name, description, video_url, video_duration, sort_order, enabled)
+VALUES (2, 2, '采购入库操作', '学习采购入库单的操作流程', 'https://videos.example.com/course2/ch2.mp4', 360, 2, TRUE);
+INSERT INTO t_course_chapter (course_id, chapter_number, chapter_name, description, video_url, video_duration, sort_order, enabled)
+VALUES (2, 3, '采购退货处理', '学习采购退货的操作流程', 'https://videos.example.com/course2/ch3.mp4', 240, 3, TRUE);
+INSERT INTO t_course_chapter (course_id, chapter_number, chapter_name, description, video_url, video_duration, sort_order, enabled)
+VALUES (2, 4, '供应商对账', '学习供应商对账的操作方法', 'https://videos.example.com/course2/ch4.mp4', 280, 4, TRUE);
+
+-- Course 3 Chapters: 销售管理
+INSERT INTO t_course_chapter (course_id, chapter_number, chapter_name, description, video_url, video_duration, sort_order, enabled)
+VALUES (3, 1, '销售开单', '学习销售订单的创建流程', 'https://videos.example.com/course3/ch1.mp4', 300, 1, TRUE);
+INSERT INTO t_course_chapter (course_id, chapter_number, chapter_name, description, video_url, video_duration, sort_order, enabled)
+VALUES (3, 2, '销售出库', '学习销售出库单的操作流程', 'https://videos.example.com/course3/ch2.mp4', 320, 2, TRUE);
+INSERT INTO t_course_chapter (course_id, chapter_number, chapter_name, description, video_url, video_duration, sort_order, enabled)
+VALUES (3, 3, '销售退货红冲', '学习销售退货红冲的操作方法', 'https://videos.example.com/course3/ch3.mp4', 260, 3, TRUE);
+INSERT INTO t_course_chapter (course_id, chapter_number, chapter_name, description, video_url, video_duration, sort_order, enabled)
+VALUES (3, 4, '客户对账与收款', '学习客户对账和收款的操作流程', 'https://videos.example.com/course3/ch4.mp4', 300, 4, TRUE);
+
+-- Course 4 Chapters: 库存管理
+INSERT INTO t_course_chapter (course_id, chapter_number, chapter_name, description, video_url, video_duration, sort_order, enabled)
+VALUES (4, 1, '库存盘点操作', '学习库存盘点的完整流程', 'https://videos.example.com/course4/ch1.mp4', 360, 1, TRUE);
+INSERT INTO t_course_chapter (course_id, chapter_number, chapter_name, description, video_url, video_duration, sort_order, enabled)
+VALUES (4, 2, '库存调拨', '学习仓库间库存调拨操作', 'https://videos.example.com/course4/ch2.mp4', 240, 2, TRUE);
+INSERT INTO t_course_chapter (course_id, chapter_number, chapter_name, description, video_url, video_duration, sort_order, enabled)
+VALUES (4, 3, '库存报表分析', '学习库存报表的查看和分析方法', 'https://videos.example.com/course4/ch3.mp4', 200, 3, TRUE);

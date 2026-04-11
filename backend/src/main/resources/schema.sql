@@ -955,3 +955,83 @@ CREATE TABLE IF NOT EXISTS t_agent_decision_log (
     review_comment TEXT,
     create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+-- Course (课程)
+CREATE TABLE IF NOT EXISTS t_course (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    course_code VARCHAR(20) NOT NULL UNIQUE,
+    course_name VARCHAR(100) NOT NULL,
+    description TEXT,
+    industry_type VARCHAR(30),
+    module VARCHAR(50),
+    cover_image_url VARCHAR(500),
+    total_chapters INT DEFAULT 0,
+    total_duration INT DEFAULT 0,
+    sort_order INT DEFAULT 0,
+    enabled BOOLEAN DEFAULT TRUE,
+    create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    update_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    deleted INT DEFAULT 0
+);
+
+-- Course Chapter (课程章节)
+CREATE TABLE IF NOT EXISTS t_course_chapter (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    course_id BIGINT NOT NULL,
+    chapter_number INT NOT NULL,
+    chapter_name VARCHAR(100) NOT NULL,
+    description TEXT,
+    video_url VARCHAR(500) NOT NULL,
+    video_duration INT DEFAULT 0,
+    sort_order INT DEFAULT 0,
+    enabled BOOLEAN DEFAULT TRUE,
+    create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    deleted INT DEFAULT 0
+);
+
+-- Learning Progress (学习进度)
+CREATE TABLE IF NOT EXISTS t_learning_progress (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    client_user_id BIGINT NOT NULL,
+    course_id BIGINT NOT NULL,
+    chapter_id BIGINT NOT NULL,
+    status VARCHAR(20) DEFAULT 'NOT_STARTED',
+    watched_duration INT DEFAULT 0,
+    completed_at TIMESTAMP,
+    create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    update_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Exam Paper (在线考试试卷)
+CREATE TABLE IF NOT EXISTS t_exam_paper (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    project_id BIGINT,
+    module VARCHAR(50) NOT NULL,
+    difficulty VARCHAR(20) NOT NULL,
+    title VARCHAR(200),
+    total_questions INT DEFAULT 0,
+    total_score INT DEFAULT 100,
+    questions TEXT,
+    created_for BIGINT,
+    status VARCHAR(20) DEFAULT 'CREATED',
+    create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    deleted INT DEFAULT 0
+);
+
+-- Exam Submission (考试提交)
+CREATE TABLE IF NOT EXISTS t_exam_submission (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    paper_id BIGINT NOT NULL,
+    client_user_id BIGINT NOT NULL,
+    answers TEXT,
+    score INT DEFAULT 0,
+    passed BOOLEAN DEFAULT FALSE,
+    correct_count INT DEFAULT 0,
+    wrong_count INT DEFAULT 0,
+    wrong_questions TEXT,
+    started_at TIMESTAMP,
+    submitted_at TIMESTAMP,
+    duration INT DEFAULT 0,
+    create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    deleted INT DEFAULT 0
+);
