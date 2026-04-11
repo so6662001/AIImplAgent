@@ -85,6 +85,10 @@
             <span>培训管理</span>
           </template>
           <el-menu-item index="/training">培训考核</el-menu-item>
+          <el-menu-item index="/course-management">
+            <el-icon><Notebook /></el-icon>
+            <span>课程管理</span>
+          </el-menu-item>
           <el-menu-item index="/trainees">学员管理</el-menu-item>
           <el-menu-item index="/training-logs">培训日志</el-menu-item>
           <el-menu-item index="/training-dashboard">培训仪表盘</el-menu-item>
@@ -275,6 +279,10 @@
               <span>培训管理</span>
             </template>
             <el-menu-item index="/training">培训考核</el-menu-item>
+            <el-menu-item index="/course-management">
+              <el-icon><Notebook /></el-icon>
+              <span>课程管理</span>
+            </el-menu-item>
             <el-menu-item index="/trainees">学员管理</el-menu-item>
             <el-menu-item index="/training-logs">培训日志</el-menu-item>
             <el-menu-item index="/training-dashboard">培训仪表盘</el-menu-item>
@@ -396,7 +404,7 @@ import { useRoute, useRouter } from 'vue-router'
 import {
   Folder, Box, User, Trophy, Document, Setting, Monitor, UserFilled,
   Avatar, Money, Coin, Cpu, MagicStick, SwitchButton, ChatDotSquare, Guide, DataLine, Headset, Service, Edit, TrendCharts, Collection, Files, PieChart,
-  Expand,
+  Expand, Notebook,
 } from '@element-plus/icons-vue'
 import { useAuthStore } from '@/stores/auth'
 

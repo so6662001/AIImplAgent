@@ -48,6 +48,7 @@
           <span>ERP培训助手</span>
           <span v-if="clientAuth.projectName" class="topbar-project">— {{ clientAuth.projectName }}</span>
         </div>
+        <router-link to="/client/learning" class="learning-link">📚 学习中心</router-link>
         <el-button text class="logout-btn" @click="handleLogout">退出</el-button>
       </header>
 
@@ -443,6 +444,20 @@ watch(messages, () => {
   font-weight: 400;
   color: #8e8e93;
   font-size: 14px;
+}
+
+.learning-link {
+  color: #4361ee;
+  text-decoration: none;
+  font-size: 14px;
+  padding: 4px 12px;
+  border-radius: 8px;
+  transition: background 0.2s;
+  white-space: nowrap;
+}
+
+.learning-link:hover {
+  background: #f0f2f5;
 }
 
 .logout-btn {

@@ -18,6 +18,18 @@ const router = createRouter({
       meta: { title: 'ERP培训助手', clientRoute: true, requiresClientAuth: true },
     },
     {
+      path: '/client/learning',
+      name: 'ClientLearning',
+      component: () => import('@/views/client/ClientLearning.vue'),
+      meta: { title: 'ERP学习中心', clientRoute: true, requiresClientAuth: true },
+    },
+    {
+      path: '/client/exam/:paperId',
+      name: 'ClientExam',
+      component: () => import('@/views/client/ClientExam.vue'),
+      meta: { title: '在线考试', clientRoute: true, requiresClientAuth: true },
+    },
+    {
       path: '/login',
       name: 'Login',
       component: () => import('@/views/auth/LoginPage.vue'),
@@ -129,6 +141,12 @@ const router = createRouter({
           name: 'RelatedUnits',
           component: () => import('@/views/archive/RelatedUnitList.vue'),
           meta: { title: '往来单位' },
+        },
+        {
+          path: 'course-management',
+          name: 'CourseManagement',
+          component: () => import('@/views/training/CourseManagement.vue'),
+          meta: { title: '课程管理' },
         },
         {
           path: 'trainees',
