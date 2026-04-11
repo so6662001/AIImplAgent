@@ -713,6 +713,7 @@ CREATE TABLE IF NOT EXISTS t_client_user (
     employee_name VARCHAR(30) NOT NULL,
     role VARCHAR(30),
     department VARCHAR(30),
+    points INT DEFAULT 100,
     access_token VARCHAR(64) NOT NULL UNIQUE,
     token_expires_at TIMESTAMP,
     enabled BOOLEAN DEFAULT TRUE,
@@ -1034,4 +1035,60 @@ CREATE TABLE IF NOT EXISTS t_exam_submission (
     duration INT DEFAULT 0,
     create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     deleted INT DEFAULT 0
+);
+
+-- User Video (UGC视频)
+CREATE TABLE IF NOT EXISTS t_user_video (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    publisher_id BIGINT NOT NULL,
+    publisher_name VARCHAR(30),
+    project_id BIGINT,
+    title VARCHAR(100) NOT NULL,
+    description TEXT,
+    category_module VARCHAR(50),
+    video_url VARCHAR(500) NOT NULL,
+    video_duration INT DEFAULT 0,
+    thumbnail_url VARCHAR(500),
+    points_cost INT DEFAULT 0,
+    total_views INT DEFAULT 0,
+    total_learners INT DEFAULT 0,
+    publisher_earned_points INT DEFAULT 0,
+    approval_status VARCHAR(20) DEFAULT 'PENDING',
+    approved_by VARCHAR(60),
+    approved_at TIMESTAMP,
+    rejection_reason VARCHAR(500),
+    enabled BOOLEAN DEFAULT TRUE,
+    create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    update_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    deleted INT DEFAULT 0
+);
+
+-- User Video Learning (UGC视频学习记录)
+CREATE TABLE IF NOT EXISTS t_user_video_learning (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    video_id BIGINT NOT NULL,
+    learner_id BIGINT NOT NULL,
+    learner_name VARCHAR(30),
+    watched_duration INT DEFAULT 0,
+    completed BOOLEAN DEFAULT FALSE,
+    points_paid INT DEFAULT 0,
+    completed_at TIMESTAMP,
+    create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    update_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Points Transaction (积分交易记录)
+CREATE TABLE IF NOT EXISTS t_points_transaction (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    user_id BIGINT NOT NULL,
+    user_name VARCHAR(30),
+    transaction_type VARCHAR(30) NOT NULL,
+    amount INT NOT NULL,
+    balance_before INT NOT NULL,
+    balance_after INT NOT NULL,
+    related_video_id BIGINT,
+    description TEXT,
+    external_api_called BOOLEAN DEFAULT FALSE,
+    external_api_response TEXT,
+    create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );

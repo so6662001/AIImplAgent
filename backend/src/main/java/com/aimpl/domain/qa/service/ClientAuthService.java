@@ -42,6 +42,7 @@ public class ClientAuthService extends ServiceImpl<ClientUserMapper, ClientUser>
             user.setAccessToken(UUID.randomUUID().toString().replace("-", ""));
             user.setTokenExpiresAt(LocalDateTime.now().plusHours(24));
             user.setEnabled(true);
+            user.setPoints(100);
             try {
                 save(user);
             } catch (DataIntegrityViolationException e) {

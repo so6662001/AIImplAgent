@@ -24,6 +24,8 @@ public class ClientUser {
 
     private LocalDateTime tokenExpiresAt;
 
+    private Integer points;
+
     private Boolean enabled;
 
     private LocalDateTime lastActiveTime;
