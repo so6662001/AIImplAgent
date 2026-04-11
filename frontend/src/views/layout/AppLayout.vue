@@ -140,6 +140,16 @@
           <span>知识库</span>
         </el-menu-item>
 
+        <el-menu-item index="/document-center">
+          <el-icon><Files /></el-icon>
+          <span>文档中心</span>
+        </el-menu-item>
+
+        <el-menu-item index="/analytics-dashboard">
+          <el-icon><PieChart /></el-icon>
+          <span>数据分析</span>
+        </el-menu-item>
+
         <el-sub-menu index="sys-config">
           <template #title>
             <el-icon><Setting /></el-icon>
@@ -156,6 +166,10 @@
           <el-menu-item index="/agent-decisions">
             <el-icon><Document /></el-icon>
             <span>决策日志</span>
+          </el-menu-item>
+          <el-menu-item index="/llm-gateway">
+            <el-icon><Cpu /></el-icon>
+            <span>LLM网关</span>
           </el-menu-item>
         </el-sub-menu>
       </el-menu>
@@ -181,7 +195,7 @@
 import { useRoute, useRouter } from 'vue-router'
 import {
   Folder, Box, User, Trophy, Document, Setting, Monitor, UserFilled,
-  Avatar, Money, Coin, Cpu, MagicStick, SwitchButton, ChatDotSquare, Guide, DataLine, Headset, Service, Edit, TrendCharts, Collection,
+  Avatar, Money, Coin, Cpu, MagicStick, SwitchButton, ChatDotSquare, Guide, DataLine, Headset, Service, Edit, TrendCharts, Collection, Files, PieChart,
 } from '@element-plus/icons-vue'
 import { useAuthStore } from '@/stores/auth'
 
