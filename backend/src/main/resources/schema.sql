@@ -760,6 +760,43 @@ CREATE TABLE IF NOT EXISTS t_import_progress (
     deleted INT DEFAULT 0
 );
 
+-- Support Ticket (工单管理)
+CREATE TABLE IF NOT EXISTS t_support_ticket (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    project_id BIGINT NOT NULL,
+    reporter_id BIGINT,
+    reporter_name VARCHAR(60),
+    title VARCHAR(100) NOT NULL,
+    description TEXT,
+    level VARCHAR(10),
+    category VARCHAR(20),
+    status VARCHAR(20) DEFAULT 'OPEN',
+    assigned_to VARCHAR(60),
+    resolution TEXT,
+    resolved_at TIMESTAMP,
+    ai_suggestion TEXT,
+    priority VARCHAR(20) DEFAULT 'MEDIUM',
+    create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    update_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    deleted INT DEFAULT 0
+);
+
+-- System Alert (系统告警)
+CREATE TABLE IF NOT EXISTS t_system_alert (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    project_id BIGINT NOT NULL,
+    alert_type VARCHAR(30),
+    severity VARCHAR(20),
+    title VARCHAR(200),
+    description TEXT,
+    suggestion TEXT,
+    acknowledged BOOLEAN DEFAULT FALSE,
+    acknowledged_by VARCHAR(60),
+    acknowledged_at TIMESTAMP,
+    create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    deleted INT DEFAULT 0
+);
+
 -- Research Report (调研分析报告)
 CREATE TABLE IF NOT EXISTS t_research_report (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
