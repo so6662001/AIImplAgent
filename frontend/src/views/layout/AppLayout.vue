@@ -135,6 +135,11 @@
           <span>智能录入</span>
         </el-menu-item>
 
+        <el-menu-item index="/knowledge">
+          <el-icon><Collection /></el-icon>
+          <span>知识库</span>
+        </el-menu-item>
+
         <el-sub-menu index="sys-config">
           <template #title>
             <el-icon><Setting /></el-icon>
@@ -147,6 +152,10 @@
           <el-menu-item index="/agent-configs">
             <el-icon><MagicStick /></el-icon>
             <span>智能体配置</span>
+          </el-menu-item>
+          <el-menu-item index="/agent-decisions">
+            <el-icon><Document /></el-icon>
+            <span>决策日志</span>
           </el-menu-item>
         </el-sub-menu>
       </el-menu>
@@ -172,7 +181,7 @@
 import { useRoute, useRouter } from 'vue-router'
 import {
   Folder, Box, User, Trophy, Document, Setting, Monitor, UserFilled,
-  Avatar, Money, Coin, Cpu, MagicStick, SwitchButton, ChatDotSquare, Guide, DataLine, Headset, Service, Edit, TrendCharts,
+  Avatar, Money, Coin, Cpu, MagicStick, SwitchButton, ChatDotSquare, Guide, DataLine, Headset, Service, Edit, TrendCharts, Collection,
 } from '@element-plus/icons-vue'
 import { useAuthStore } from '@/stores/auth'
 

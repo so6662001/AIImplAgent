@@ -292,6 +292,18 @@ const router = createRouter({
           component: () => import('@/views/inputassist/SmartInputPage.vue'),
           meta: { title: '智能录入' },
         },
+        {
+          path: 'knowledge',
+          name: 'Knowledge',
+          component: () => import('@/views/knowledge/KnowledgeBasePage.vue'),
+          meta: { title: '知识库' },
+        },
+        {
+          path: 'agent-decisions',
+          name: 'AgentDecisions',
+          component: () => import('@/views/agent/AgentDecisionList.vue'),
+          meta: { title: '决策日志' },
+        },
       ],
     },
   ],
