@@ -275,6 +275,8 @@ CREATE TABLE IF NOT EXISTS t_delivery_report (
     document_completion_rate DECIMAL(6,2),
     overall_score DECIMAL(6,2),
     ai_comment VARCHAR(2000),
+    report_content CLOB,
+    auto_generated BOOLEAN DEFAULT FALSE,
     status VARCHAR(20) DEFAULT 'DRAFT',
     confirmed_by VARCHAR(60),
     confirmed_at TIMESTAMP,
