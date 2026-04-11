@@ -109,6 +109,10 @@
           </template>
           <el-menu-item index="/engineers">工程师管理</el-menu-item>
           <el-menu-item index="/worklogs">工作日志</el-menu-item>
+          <el-menu-item index="/workforce-dashboard">
+            <el-icon><TrendCharts /></el-icon>
+            <span>人力看板</span>
+          </el-menu-item>
         </el-sub-menu>
 
         <el-menu-item index="/servers">
@@ -168,7 +172,7 @@
 import { useRoute, useRouter } from 'vue-router'
 import {
   Folder, Box, User, Trophy, Document, Setting, Monitor, UserFilled,
-  Avatar, Money, Coin, Cpu, MagicStick, SwitchButton, ChatDotSquare, Guide, DataLine, Headset, Service, Edit,
+  Avatar, Money, Coin, Cpu, MagicStick, SwitchButton, ChatDotSquare, Guide, DataLine, Headset, Service, Edit, TrendCharts,
 } from '@element-plus/icons-vue'
 import { useAuthStore } from '@/stores/auth'
 

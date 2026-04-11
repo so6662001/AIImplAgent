@@ -16,3 +16,7 @@ export function createProjectEvaluation(data: Record<string, unknown>) {
 export function listProjectEvaluations(projectId: number) {
   return request.get<R<ProjectEvaluation[]>>('/project-evaluations', { params: { projectId } })
 }
+
+export function getWorkforceDashboard() { return request.get<R<any>>('/workforce/dashboard') }
+export function getCompositeScore(engineerId: number) { return request.get<R<any>>(`/workforce/composite-score/${engineerId}`) }
+export function getMonthlyReport() { return request.get<R<any>>('/workforce/monthly-report') }

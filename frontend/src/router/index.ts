@@ -149,6 +149,12 @@ const router = createRouter({
           meta: { title: '工作日志' },
         },
         {
+          path: 'workforce-dashboard',
+          name: 'WorkforceDashboard',
+          component: () => import('@/views/workforce/WorkforceDashboard.vue'),
+          meta: { title: '人力看板' },
+        },
+        {
           path: 'training-dashboard',
           name: 'TrainingDashboard',
           component: () => import('@/views/training/TrainingDashboard.vue'),
